@@ -1,0 +1,6 @@
+**/__pycache__/
+*.env
+*.confic.py
+app/config/settings.py
+.gitignore
+*.pyc
