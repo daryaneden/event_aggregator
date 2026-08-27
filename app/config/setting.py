@@ -1,14 +1,22 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    EVENT_PROVIDER_URL = ''
-    EVENT_PROVIDER_API_KEY = ''
-    DB_HOST: str = 'localhost'
-    DB_PORT: int = 5433
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
+     
+    EVENT_PROVIDER_URL: str 
+    EVENT_PROVIDER_API_KEY: str 
+    DB_HOST: str = 'events_db'
+    DB_PORT: int = 5432
     DB_USER: str = 'postgres'
     DB_PASSWORD: str = 'password'
     DB_DRIVER: str = 'postgresql+asyncpg'
-    DB_NAME: str = ''
+    DB_NAME: str = 'event_aggregator'
+    CELERY_BROKER_URL: str = 'redis://events_redis:6379/0'
+    #'redis://redis:6379/0'
 
     @property
     def db_url(self):

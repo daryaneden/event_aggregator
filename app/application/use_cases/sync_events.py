@@ -1,40 +1,101 @@
+import logging
+from collections.abc import Callable
+from datetime import datetime
+
 from app.application.interfaces.event_provider import EventsProvider
 from app.application.interfaces.uow import UnitOfWork
 from app.domain.entities.sync_state import SyncState
+from app.domain.entities.sync_state import SyncStatus
+from app.infrastructure.event_provider.events_paginator import EventsPaginator
 
-from datetime import datetime
+logger = logging.getLogger(__name__)
 
-INITIAL_CHANGED_AT = datetime(2000, 1, 1)
+FIRST_SYNC_DATE = datetime(2000, 1, 1)
 
 class SyncEventsUseCase:
 
-    def __init__(self, events_provider: EventsProvider, uow: UnitOfWork):
+    def __init__(
+        self,
+        provider: EventsProvider,
+        uow_factory: Callable[[], UnitOfWork],
+    ):
+        self.provider = provider
+        self.uow_factory = uow_factory
 
-        self.events_provider = events_provider
-        self.uow = uow
+    async def execute(self) -> None:
+        await self._set_status(SyncStatus.RUNNING)
 
-    async def execute(self, changed_at) -> None:
+        try:
+            await self._sync()
+        except Exception:
+            logger.exception(
+                "Events synchronization failed"
+            )
 
-        self.events_provider.get_events(changed_at)
+            await self._set_status(SyncStatus.FAILED)
 
-        sync_state = await self.uow.sync_state_repository.get()
+            raise
 
-        changed_at = (sync_state.last_changed_at if sync_state else INITIAL_CHANGED_AT)
+    async def _sync(self) -> None:
 
-        events = await self.events_provider.get_events(changed_at)
+        async with self.uow_factory() as uow:
 
-        if not events:
-            return
+            sync_state = await uow.sync_state_repository.get()
 
-        last_changed_at = max(event.changed_at for event in events)
+            changed_at = (
+                sync_state.last_changed_at
+                if sync_state
+                and sync_state.last_changed_at
+                else FIRST_SYNC_DATE
+            )
 
-        async with self.uow:
+            last_changed_at = (
+                sync_state.last_changed_at
+                if sync_state
+                else None
+            )
 
-            await self.uow.event_repository.save(events)
+            paginator = EventsPaginator(
+                provider=self.provider,
+                changed_at=changed_at,
+            )
 
-            new_sync_state = SyncState(id=1, 
-                                        last_sync_time=datetime.now(),
-                                        last_changed_at=last_changed_at,
-                                        sync_status="SUCCESS")
+            async for event in paginator:
 
-            await self.uow.sync_state_repository.save(new_sync_state)
+                await uow.event_repository.save(event)
+
+                if (
+                    last_changed_at is None
+                    or event.changed_at > last_changed_at
+                ):
+                    last_changed_at = event.changed_at
+
+            await uow.sync_state_repository.save(
+                SyncState(
+                    last_sync_time=datetime.now(),
+                    last_changed_at=last_changed_at,
+                    sync_status=SyncStatus.SUCCESS,
+                )
+            )
+
+    async def _set_status(
+        self,
+        status: SyncStatus,
+    ) -> None:
+
+        async with self.uow_factory() as uow:
+
+            sync_state = await uow.sync_state_repository.get()
+
+            if sync_state is None:
+                sync_state = SyncState(
+                    last_sync_time=None,
+                    last_changed_at=None,
+                    sync_status=status,
+                )
+            else:
+                sync_state.sync_status = status
+
+            await uow.sync_state_repository.save(
+                sync_state
+            )

@@ -3,7 +3,7 @@ from datetime import datetime
 from enum import Enum
 
 
-class SyncStatus(Enum, str):
+class SyncStatus(str, Enum):
     NEVER_RUN = "never_run"
     RUNNING = "running"
     SUCCESS = "success"

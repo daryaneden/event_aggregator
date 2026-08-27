@@ -9,7 +9,6 @@ class UnitOfWork(ABC):
     event_repository: EventRepository
     sync_state_repository: SyncStateRepository
 
-    @abstractmethod
     async def __aenter__(self):
         return self
 

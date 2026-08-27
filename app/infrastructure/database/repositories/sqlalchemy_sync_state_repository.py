@@ -20,7 +20,7 @@ class SqlAlchemySyncStateRepository(SyncStateRepository):
         if sync_state_model is None:
             return None
 
-        return self._to_domain(sync_state_model)
+        return await self._to_domain(sync_state_model)
 
     async def save(self, sync_state: SyncState) -> None:
 
@@ -29,7 +29,6 @@ class SqlAlchemySyncStateRepository(SyncStateRepository):
         if model is None:
 
             model = SyncStateModel(
-                id=1,
                 last_sync_time=sync_state.last_sync_time,
                 last_changed_at=sync_state.last_changed_at,
                 sync_status=sync_state.sync_status,
@@ -46,7 +45,7 @@ class SqlAlchemySyncStateRepository(SyncStateRepository):
     @staticmethod
     async def _to_domain (model: SyncStateModel) -> SyncState:
 
-        return SyncState(id=model.id,
+        return SyncState(
         last_sync_time=model.last_sync_time,
         last_changed_at=model.last_changed_at,
         sync_status=model.sync_status)

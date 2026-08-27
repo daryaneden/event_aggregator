@@ -19,7 +19,7 @@ class EventsProviderClient(EventsProvider):
         if url is None:
             url = (
                 f"/api/events/"
-                f"?changed_at={changed_at}")
+                f"?changed_at={changed_at.strftime("%Y-%m-%d")}")
 
         response = await self.client.get(url)
         response.raise_for_status()
