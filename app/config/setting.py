@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     DB_USER: str = 'postgres'
     DB_PASSWORD: str = 'password'
     DB_DRIVER: str = 'postgresql+asyncpg'
-    DB_NAME: str = 'event_aggregator'
+    DB_NAME: str = 'student_daryaneden-events-aggregator-postgres'
 
 
     @property
