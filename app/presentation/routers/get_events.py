@@ -9,8 +9,7 @@ from app.presentation.mappers.event_response_mapper import EventResponseMapper
 
 router = APIRouter(prefix="/api/events", tags=["get_events"])
 
-@router.get("/api/events", response_model=EventListResponse)
-
+@router.get('')
 async def get_events(use_case: Annotated[GetEventsUseCase, Depends(get_get_events_use_case)],
                      mapper: Annotated[EventResponseMapper, Depends(get_event_response_mapper)],
                      request: Annotated[GetEventsRequest, Depends()]):
