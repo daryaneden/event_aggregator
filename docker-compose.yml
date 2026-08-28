@@ -6,9 +6,9 @@ services:
     restart: always
 
     environment:
-      POSTGRES_USERNAME: postgres
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      DB_NAME: student_daryaneden-events-aggregator-postgres
+      POSTGRES_DB: student_daryaneden-events-aggregator-postgres
 
     ports:
       - "5432:5432"
@@ -17,7 +17,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d event_aggregator"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U postgres -d student_daryaneden-events-aggregator-postgres"
+        ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -29,15 +33,19 @@ services:
     restart: always
 
     environment:
-      POSTGRES_USERNAME: postgres
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      DB_NAME: student_daryaneden-events-aggregator-postgres
+      POSTGRES_DB: student_daryaneden-events-aggregator-postgres-test
 
     ports:
       - "5433:5432"
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d event_aggregator_test"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U postgres -d student_daryaneden-events-aggregator-postgres-test"
+        ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -62,11 +70,11 @@ services:
       - "8000:8000"
 
     environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      POSTGRES_USER: postgres
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: password
-      DB_NAME: event_aggregator
+      POSTGRES_DB: student_daryaneden-events-aggregator-postgres
 
       EVENT_PROVIDER_URL: ${EVENT_PROVIDER_URL}
       EVENT_PROVIDER_API_KEY: ${EVENT_PROVIDER_API_KEY}
@@ -74,7 +82,6 @@ services:
     volumes:
       - .:/app
       - /app/.venv
-
 
   tests:
     build: .
@@ -91,13 +98,13 @@ services:
         condition: service_healthy
 
     environment:
-      DB_HOST: db-test
-      DB_PORT: 5432
+      POSTGRES_HOST: db-test
+      POSTGRES_PORT: 5432
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: password
-      DB_NAME: event_aggregator_test
+      POSTGRES_DB: student_daryaneden-events-aggregator-postgres-test
 
-      TEST_DATABASE_URL: postgresql+asyncpg://postgres:password@db-test:5432/event_aggregator_test
+      TEST_DATABASE_URL: postgresql+asyncpg://postgres:password@db-test:5432/student_daryaneden-events-aggregator-postgres-test
 
     volumes:
       - .:/app

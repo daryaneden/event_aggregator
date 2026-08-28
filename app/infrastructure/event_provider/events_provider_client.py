@@ -1,5 +1,6 @@
 import httpx
 from datetime import datetime
+from urllib.parse import urljoin
 
 from app.application.interfaces.event_provider import EventsProvider
 from app.application.models.events_page import EventsPage
@@ -10,16 +11,26 @@ from app.infrastructure.event_provider.dtos import ProviderEventDTO, ProviderEve
 
 class EventsProviderClient(EventsProvider):
 
-    def __init__(self, client: httpx.AsyncClient):
+    def __init__(self, client: httpx.AsyncClient, base_url: str):
+
+        print(">>> EVENTS PROVIDER RECEIVED:", repr(client))
+        print(">>> EVENTS PROVIDER TYPE:", type(client)) 
+
         self.client = client
+        self.base_url = base_url
 
 
     async def get_events_page(self, changed_at: datetime, url: str | None = None) -> EventsPage:
 
         if url is None:
-            url = (
-                f"/api/events/"
-                f"?changed_at={changed_at.strftime("%Y-%m-%d")}")
+            url = urljoin(
+        str(self.client.base_url),
+        f"/api/events/?changed_at={changed_at.strftime('%Y-%m-%d')}"
+)
+
+        print(">>> REQUEST URL:", repr(url))
+        print(">>> BASE URL:", repr(self.client.base_url))
+
 
         response = await self.client.get(url)
         response.raise_for_status()
