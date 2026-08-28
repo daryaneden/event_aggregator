@@ -15,8 +15,7 @@ class Settings(BaseSettings):
     DB_PASSWORD: str = 'password'
     DB_DRIVER: str = 'postgresql+asyncpg'
     DB_NAME: str = 'event_aggregator'
-    CELERY_BROKER_URL: str = 'redis://events_redis:6379/0'
-    #'redis://redis:6379/0'
+    CELERY_BROKER_URL: str = 'redis://redis:6379/0'
 
     @property
     def db_url(self):

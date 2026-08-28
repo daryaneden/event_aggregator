@@ -69,6 +69,8 @@ services:
       DB_PASSWORD: password
       DB_NAME: event_aggregator
       CELERY_BROKER_URL: redis://redis:6379/0
+      EVENT_PROVIDER_URL: ${EVENT_PROVIDER_URL}
+      EVENT_PROVIDER_API_KEY: ${EVENT_PROVIDER_API_KEY}
     volumes:
       - .:/app
       - /app/.venv
@@ -94,6 +96,8 @@ services:
       DB_PASSWORD: password
       DB_NAME: event_aggregator
       CELERY_BROKER_URL: redis://redis:6379/0
+      EVENT_PROVIDER_URL: ${EVENT_PROVIDER_URL}
+      EVENT_PROVIDER_API_KEY: ${EVENT_PROVIDER_API_KEY}
     volumes:
       - .:/app
       - /app/.venv
@@ -118,7 +122,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: password
       DB_NAME: event_aggregator
-      CELERY_BROKER_URL: redis://events_redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
     volumes:
       - .:/app
       - /app/.venv
