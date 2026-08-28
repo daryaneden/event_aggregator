@@ -4,150 +4,105 @@ services:
     image: postgres:15
     container_name: events_db
     restart: always
+
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: event_aggregator
+
     ports:
       - "5432:5432"
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d event_aggregator"]
       interval: 5s
       timeout: 5s
       retries: 5
 
+
   db-test:
     image: postgres:15
     container_name: events_db_test
     restart: always
+
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: event_aggregator_test
+
     ports:
       - "5433:5432"
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d event_aggregator_test"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:7
-    container_name: events_redis
-    restart: always
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   app:
     build: .
     container_name: events_app
     restart: always
+
     command: >
       sh -c "
         uv run alembic upgrade head &&
         uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
       "
+
     depends_on:
       db:
         condition: service_healthy
-      redis:
-        condition: service_healthy
+
     ports:
       - "8000:8000"
+
     environment:
       DB_HOST: db
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: password
       DB_NAME: event_aggregator
-      CELERY_BROKER_URL: redis://redis:6379/0
+
       EVENT_PROVIDER_URL: ${EVENT_PROVIDER_URL}
       EVENT_PROVIDER_API_KEY: ${EVENT_PROVIDER_API_KEY}
+
     volumes:
       - .:/app
       - /app/.venv
 
-  celery:
-    build: .
-    container_name: events_celery
-    restart: always
-    command: >
-      uv run celery
-      -A app.infrastructure.celery.app:celery_app
-      worker
-      --loglevel=info
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_NAME: event_aggregator
-      CELERY_BROKER_URL: redis://redis:6379/0
-      EVENT_PROVIDER_URL: ${EVENT_PROVIDER_URL}
-      EVENT_PROVIDER_API_KEY: ${EVENT_PROVIDER_API_KEY}
-    volumes:
-      - .:/app
-      - /app/.venv
-
-  celery-beat:
-    build: .
-    container_name: events_celery_beat
-    restart: always
-    command: >
-      uv run celery
-      -A app.infrastructure.celery.app:celery_app
-      beat
-      --loglevel=info
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_NAME: event_aggregator
-      CELERY_BROKER_URL: redis://redis:6379/0
-    volumes:
-      - .:/app
-      - /app/.venv
 
   tests:
     build: .
     container_name: events_tests
+
     command: >
       sh -c "
         uv run alembic upgrade head &&
         uv run pytest tests
       "
+
     depends_on:
       db-test:
         condition: service_healthy
+
     environment:
       DB_HOST: db-test
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: password
       DB_NAME: event_aggregator_test
+
       TEST_DATABASE_URL: postgresql+asyncpg://postgres:password@db-test:5432/event_aggregator_test
+
     volumes:
       - .:/app
       - /app/.venv
+
 
 volumes:
   postgres_data:

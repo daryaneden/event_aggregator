@@ -9,13 +9,13 @@ class Settings(BaseSettings):
      
     EVENT_PROVIDER_URL: str 
     EVENT_PROVIDER_API_KEY: str 
-    DB_HOST: str = 'events_db'
+    DB_HOST: str = 'db'
     DB_PORT: int = 5432
     DB_USER: str = 'postgres'
     DB_PASSWORD: str = 'password'
     DB_DRIVER: str = 'postgresql+asyncpg'
     DB_NAME: str = 'event_aggregator'
-    CELERY_BROKER_URL: str = 'redis://redis:6379/0'
+
 
     @property
     def db_url(self):
