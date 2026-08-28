@@ -8,10 +8,10 @@ from app.presentation.dependencies import get_get_event_use_case, get_event_resp
 from app.application.use_cases.get_event import GetEventUseCase
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
 
-router = APIRouter(prefix="/api/event", tags=["get_event"])
+router = APIRouter(prefix="/api/events", tags=["get_event"])
 
 @router.get(
-    "/api/events/{event_id}",
+    "{event_id}",
     response_model=EventResponse,
 )
 async def get_event(
