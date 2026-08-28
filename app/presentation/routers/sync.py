@@ -10,7 +10,7 @@ router = APIRouter(
 )
 
 
-@router.post("/trigger", status_code=202)
+@router.post("/trigger", status_code=200)
 async def trigger_sync(
     background_tasks: BackgroundTasks,
     use_case: Annotated[

@@ -6,9 +6,9 @@ services:
     restart: always
 
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: student_daryaneden-events-aggregator-postgres
+      DB_NAME: student_daryaneden-events-aggregator-postgres
 
     ports:
       - "5432:5432"
@@ -29,9 +29,9 @@ services:
     restart: always
 
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: student_daryaneden-events-aggregator-postgres
+      DB_NAME: student_daryaneden-events-aggregator-postgres
 
     ports:
       - "5433:5432"
@@ -64,8 +64,8 @@ services:
     environment:
       DB_HOST: db
       DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
       DB_NAME: event_aggregator
 
       EVENT_PROVIDER_URL: ${EVENT_PROVIDER_URL}
@@ -93,8 +93,8 @@ services:
     environment:
       DB_HOST: db-test
       DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: password
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: password
       DB_NAME: event_aggregator_test
 
       TEST_DATABASE_URL: postgresql+asyncpg://postgres:password@db-test:5432/event_aggregator_test
