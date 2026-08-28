@@ -10,7 +10,7 @@ router = APIRouter(
 
 @router.post("/trigger", status_code=200)
 async def trigger_sync():
-    # sync_events.delay()
+    sync_events.delay()
 
     return {
         "message": "Synchronization started"
