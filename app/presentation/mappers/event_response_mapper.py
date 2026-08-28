@@ -14,6 +14,7 @@ class EventResponseMapper:
                 name=event.place.name,
                 city=event.place.city,
                 address=event.place.address,
+                seats_pattern=event.place.seats_pattern
             ),
             event_time=event.event_time,
             registration_deadline=event.registration_deadline,
