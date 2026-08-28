@@ -7,7 +7,9 @@ from app.infrastructure.database.database import get_db_session
 from app.infrastructure.database.database import AsyncSessionFactory
 from app.application.use_cases.get_events import GetEventsUseCase
 from app.application.use_cases.get_event import GetEventUseCase
+from app.application.use_cases.sync_events import SyncEventsUseCase
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
+from app.infrastructure.uow.sqlalchemy_background_uow import SqlAlchemyBackgroundUnitOfWork
 from sqlalchemy.ext.asyncio import AsyncSession
 from httpx import AsyncClient
 from fastapi import Depends
@@ -36,5 +38,16 @@ async def get_get_events_use_case(event_repository: Annotated[SqlAlchemyEventRep
 async def get_event_response_mapper():
     return EventResponseMapper()
 
-def get_get_event_use_case(event_repository: Annotated[SqlAlchemyEventRepository, Depends(get_sqlalchemy_event_repository)]):
+async def get_get_event_use_case(event_repository: Annotated[SqlAlchemyEventRepository, Depends(get_sqlalchemy_event_repository)]):
     return GetEventUseCase(event_repository)
+
+async def get_sync_events_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)],
+                                   uow: Annotated[SqlAlchemyUnitOfWork, Depends(get_sqlalchemy_unit_of_work)]):
+    return SyncEventsUseCase(provider,uow)
+
+async def get_background_sqlalchemy_unit_of_work(event_repository: Annotated[SqlAlchemyEventRepository, Depends(get_sqlalchemy_event_repository)],
+                                                 sync_state_repository: Annotated[SqlAlchemySyncStateRepository, Depends(get_sqlalchemy_sync_state_repository)],
+                                                 factory=AsyncSessionFactory,
+                                                 ):
+    return SqlAlchemyBackgroundUnitOfWork(factory, event_repository, sync_state_repository)
+

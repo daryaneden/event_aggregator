@@ -15,7 +15,7 @@ celery_app.conf.timezone = "UTC"
 
 celery_app.conf.beat_schedule = {
     "sync-events-daily": {
-        "task": "app.infrastructure.celery.tasks.sync_events",
+        "task": "app.infrastructure.celery.task.sync_events",
         "schedule": 60 * 60 * 24,
     },
 }

@@ -1,22 +1,30 @@
-from app.infrastructure.database.database import AsyncSessionFactory
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.application.interfaces.event_repository import EventRepository
-from app.application.interfaces.sync_state_repository import SyncStateRepository
 from app.application.interfaces.uow import UnitOfWork
-from app.infrastructure.database.repositories.sqlalchemy_event_repository import SqlAlchemyEventRepository
+from app.infrastructure.uow.session_factory import SessionFactory
 from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import SqlAlchemySyncStateRepository
+from app.infrastructure.database.repositories.sqlalchemy_event_repository import SqlAlchemyEventRepository
 
-class SqlAlchemyUnitOfWork(UnitOfWork):
+class SqlAlchemyBackgroundUnitOfWork(UnitOfWork):
 
-    def __init__(self, session: AsyncSession, 
-                 event_repository: EventRepository, 
-                 sync_state_repository: SyncStateRepository):
-        self.session = session
+    def __init__(self, factory: AsyncSession, event_repository, sync_state_repository):
 
+        self.session = factory
         self.event_repository = event_repository
-
         self.sync_state_repository = sync_state_repository
+
+
+        # self.session = SessionFactory()
+
+        # self.event_repository = SqlAlchemyEventRepository(
+        #     self.session
+        # )
+
+        # self.sync_state_repository = (
+        #     SqlAlchemySyncStateRepository(
+        #         self.session
+        #     )
+        # )
 
     async def __aenter__(self):
         await self.session.begin()
@@ -35,4 +43,3 @@ class SqlAlchemyUnitOfWork(UnitOfWork):
                 await self.session.commit()
         finally:
             await self.session.close()
-
