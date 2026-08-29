@@ -11,7 +11,7 @@ from app.presentation.mappers.event_response_mapper import EventResponseMapper
 router = APIRouter(prefix="/api/events", tags=["get_event"])
 
 @router.get(
-    "{event_id}",
+    "/{event_id}",
     response_model=EventResponse,
 )
 async def get_event(

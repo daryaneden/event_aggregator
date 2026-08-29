@@ -12,6 +12,4 @@ COPY . .
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-RUN chmod +x run.sh
-
-CMD ["./run.sh"]
+CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn app.main:app --host 0.0.0.0 --port 8000"]
