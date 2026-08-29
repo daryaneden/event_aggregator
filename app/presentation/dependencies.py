@@ -80,3 +80,9 @@ def build_uow(session: AsyncSession) -> SqlAlchemyUnitOfWork:
         event_repository=event_repository,
         sync_state_repository=sync_state_repository,
     )
+
+def build_sync_events_use_case_for_lifespan() -> SyncEventsUseCase:
+    return SyncEventsUseCase(
+        provider=get_events_provider_client(),
+        uow_factory=get_uow_factory()
+    )
