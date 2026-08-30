@@ -1,12 +1,13 @@
 import httpx
 from datetime import datetime
 from urllib.parse import urljoin
+from uuid import UUID
 
 from app.application.interfaces.event_provider import EventsProvider
 from app.application.models.events_page import EventsPage
 from app.domain.entities.event import Event
 from app.domain.entities.place import Place
-from app.infrastructure.event_provider.dtos import ProviderEventDTO, ProviderEventsPageDTO
+from app.infrastructure.event_provider.dtos import ProviderEventDTO, ProviderEventsPageDTO, ProviderSeatsDTO
 
 
 class EventsProviderClient(EventsProvider):
@@ -68,3 +69,20 @@ class EventsProviderClient(EventsProvider):
             created_at=dto.created_at,
             status_changed_at=dto.status_changed_at
         )
+
+    async def get_available_seats(
+    self,
+    event_id: UUID,
+) -> list[str] | None:
+        url = f"/api/events/{event_id}/seats/"
+
+        response = await self.client.get(url)
+
+        if response.status_code == 404:
+            return None
+
+        response.raise_for_status()
+
+        dto = ProviderSeatsDTO.model_validate(response.json())
+
+        return dto.seats

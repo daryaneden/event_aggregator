@@ -12,6 +12,8 @@ from app.application.use_cases.sync_events import SyncEventsUseCase
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
 from app.infrastructure.uow.sqlalchemy_background_uow import SqlAlchemyBackgroundUnitOfWork
 from app.config.setting import Settings
+from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
+from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from httpx import AsyncClient
@@ -80,6 +82,16 @@ def build_uow(session: AsyncSession) -> SqlAlchemyUnitOfWork:
         event_repository=event_repository,
         sync_state_repository=sync_state_repository,
     )
+seats_cache = InMemorySeatsCache()
+
+def get_available_seats_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)]) -> GetAvailableSeatsUseCase:
+    return GetAvailableSeatsUseCase(
+        provider=provider,
+        cache=seats_cache,
+    )
+
+#lifespan dependencies 
+
 def build_events_provider_client_for_lifespan() -> EventsProviderClient:
     client = create_event_provider_client()
     settings = get_settings()

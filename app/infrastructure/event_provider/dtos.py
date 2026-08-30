@@ -26,3 +26,6 @@ class ProviderEventDTO(BaseModel):
 class ProviderEventsPageDTO(BaseModel):
     results: list[ProviderEventDTO]
     next: str | None
+
+class ProviderSeatsDTO(BaseModel):
+    seats: list[str]
