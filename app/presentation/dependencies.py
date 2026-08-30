@@ -18,7 +18,7 @@ from httpx import AsyncClient
 from fastapi import Depends
 from typing import Annotated
 
-async def get_settings():
+def get_settings():
     return Settings()
 
 def get_async_session_factory():
@@ -80,9 +80,17 @@ def build_uow(session: AsyncSession) -> SqlAlchemyUnitOfWork:
         event_repository=event_repository,
         sync_state_repository=sync_state_repository,
     )
+def build_events_provider_client_for_lifespan() -> EventsProviderClient:
+    client = create_event_provider_client()
+    settings = get_settings()
+
+    return EventsProviderClient(
+        client,
+        base_url=settings.EVENT_PROVIDER_URL
+    )
 
 def build_sync_events_use_case_for_lifespan() -> SyncEventsUseCase:
     return SyncEventsUseCase(
-        provider=get_events_provider_client(),
+        provider=build_events_provider_client_for_lifespan(),
         uow_factory=get_uow_factory()
     )
