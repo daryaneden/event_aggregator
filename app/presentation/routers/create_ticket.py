@@ -4,8 +4,8 @@ from typing import Annotated
 from app.presentation.schemas.create_ticket_request import CreateTicketRequest
 from app.presentation.schemas.ticket_response import TicketResponse
 from app.application.dtos.register_ticket import RegisterTicketDTO
-from app.application.use_cases.register_ticket_use_case import RegisterTicketUseCase
-from app.presentation.dependencies import get_register_ticket_use_case
+from app.application.use_cases.create_ticket_use_case import CreateTicketUseCase
+from app.presentation.dependencies import get_create_ticket_use_case
 
 router = APIRouter(
     prefix="/api/tickets",
@@ -20,8 +20,8 @@ router = APIRouter(
 async def register_ticket(
     request: CreateTicketRequest,
     use_case: Annotated[
-        RegisterTicketUseCase,
-        Depends(get_register_ticket_use_case),
+        CreateTicketUseCase,
+        Depends(get_create_ticket_use_case),
     ],
 ):
     data = RegisterTicketDTO(

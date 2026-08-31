@@ -22,3 +22,7 @@ class EventsProvider(ABC):
     self,
     data: RegisterTicketDTO) -> UUID:
         pass
+
+    @abstractmethod
+    async def cancel_ticket(self, ticket_id: UUID) -> bool:
+        pass

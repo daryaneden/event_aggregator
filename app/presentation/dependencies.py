@@ -9,12 +9,14 @@ from app.infrastructure.database.database import AsyncSessionFactory
 from app.application.use_cases.get_events import GetEventsUseCase
 from app.application.use_cases.get_event import GetEventUseCase
 from app.application.use_cases.sync_events import SyncEventsUseCase
-from app.application.use_cases.register_ticket_use_case import RegisterTicketUseCase
+from app.application.use_cases.create_ticket_use_case import CreateTicketUseCase
+from app.application.use_cases.cancel_ticket import CancelTicketUseCase
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
 from app.infrastructure.uow.sqlalchemy_background_uow import SqlAlchemyBackgroundUnitOfWork
 from app.config.setting import Settings
 from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
 from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
+from app.infrastructure.in_memory_ticket_registry import InMemoryTicketRegistry
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from httpx import AsyncClient
@@ -91,8 +93,34 @@ async def get_available_seats_use_case(provider: Annotated[EventsProviderClient,
         cache=seats_cache,
     )
 
-async def get_register_ticket_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)]):
-    return RegisterTicketUseCase(provider)
+ticket_registry = InMemoryTicketRegistry()
+
+def get_ticket_registry():
+    return ticket_registry
+
+def get_create_ticket_use_case(
+    provider: Annotated[
+        EventsProviderClient,
+        Depends(get_events_provider_client),
+    ],
+):
+
+    return CreateTicketUseCase(
+        provider=provider,
+        ticket_registry=get_ticket_registry(),
+    )
+
+def get_cancel_ticket_use_case(
+    provider: Annotated[
+        EventsProviderClient,
+        Depends(get_events_provider_client),
+    ],
+):
+
+    return CancelTicketUseCase(
+        provider=provider,
+        ticket_registry=get_ticket_registry(),
+    )
 
 #lifespan dependencies 
 

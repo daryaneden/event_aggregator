@@ -111,3 +111,23 @@ class EventsProviderClient(EventsProvider):
         response_data = response.json()
 
         return UUID(response_data["ticket_id"])
+
+    async def cancel_ticket(
+    self,
+    event_id: UUID,
+    ticket_id: UUID,
+) -> bool:
+
+        response = await self.client.request(
+            method="DELETE",
+            url=f"/api/events/{event_id}/unregister/",
+            json={
+                "ticket_id": str(ticket_id),
+            },
+        )
+
+        response.raise_for_status()
+
+        return True
+
+    
