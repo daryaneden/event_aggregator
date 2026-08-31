@@ -46,6 +46,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
 
+    env:
+        EVENT_PROVIDER_URL: "http://test-provider"
+        EVENT_PROVIDER_API_KEY: "test-api-key"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -64,7 +68,7 @@ jobs:
         run: uv sync --frozen
 
       - name: Run unit tests
-        run: uv run pytest tests/unit
+        run: uv run pytest tests/application
 
 
   # =========================
