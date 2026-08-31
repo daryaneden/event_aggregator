@@ -18,7 +18,7 @@ router = APIRouter(
 
 
 @router.get(
-    "/{event_id}/seats/",
+    "/{event_id}/seats",
     response_model=AvailableSeatsResponse,
 )
 async def get_available_seats(
