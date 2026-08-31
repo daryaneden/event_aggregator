@@ -37,4 +37,4 @@ async def get_available_seats(
             detail=str(e),
         )
 
-    return AvailableSeatsResponse(seats=seats)
+    return AvailableSeatsResponse(event_id=event_id, seats=seats)
