@@ -4,7 +4,7 @@ from typing import Annotated
 from app.presentation.schemas.create_ticket_request import CreateTicketRequest
 from app.presentation.schemas.ticket_response import TicketResponse
 from app.application.dtos.register_ticket import RegisterTicketDTO
-from app.application.use_cases.create_ticket_use_case import CreateTicketUseCase
+from app.application.use_cases.create_ticket import CreateTicketUseCase
 from app.presentation.dependencies import get_create_ticket_use_case
 
 router = APIRouter(

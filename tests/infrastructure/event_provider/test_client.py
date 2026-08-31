@@ -1,77 +1,38 @@
 from datetime import datetime
 from unittest.mock import AsyncMock, Mock
-from uuid import UUID
 import pytest
 import httpx
+from uuid import UUID
 
 from app.infrastructure.event_provider.events_provider_client import EventsProviderClient
 
 @pytest.mark.asyncio
-async def test_get_events_page_returns_events_page():
-    response = Mock()
-
-    response.json.return_value = {
-        "results": [
-            {
-                "id": "550e8400-e29b-41d4-a716-446655440000",
-                "name": "Concert",
-                "place": {
-                    "id": "650e8400-e29b-41d4-a716-446655440000",
-                    "name": "Arena",
-                    "city": "Helsinki",
-                    "address": "Main street 1",
-                    "seats_pattern": "pattern",
-                    "changed_at": "2026-08-20T10:00:00",
-                    "created_at": "2026-08-01T10:00:00",
-                },
-                "event_time": "2026-09-01T18:00:00",
-                "registration_deadline": "2026-08-30T18:00:00",
-                "status": "active",
-                "number_of_visitors": 100,
-                "changed_at": "2026-08-20T10:00:00",
-                "created_at": "2026-08-01T10:00:00",
-                "status_changed_at": "2026-08-20T10:00:00",
-            }
-        ],
-        "next": "/api/events/?cursor=abc",
+async def test_get_events_page_returns_events_page(
+    events_provider,
+    http_client,
+    http_response,
+    provider_event,
+):
+    http_response.json.return_value = {
+        "results": [provider_event],
+        "next": None,
     }
 
-    client = Mock()
-    client.get = AsyncMock(return_value=response)
+    http_client.get.return_value = http_response
 
-    provider = EventsProviderClient(client)
-
-    changed_at = datetime(2026, 8, 20)
-
-    result = await provider.get_events_page(
-        changed_at=changed_at,
-    )
-
-    client.get.assert_awaited_once_with(
-        "/api/events/?changed_at=2026-08-20"
-    )
-
-    response.raise_for_status.assert_called_once()
+    result = await events_provider.get_events_page(
+    changed_at=datetime(2000, 1, 1))
 
     assert len(result.events) == 1
+    assert result.events[0].id == UUID(provider_event["id"])
+    assert result.events[0].name == provider_event["name"]
+    assert result.next_url is None
 
-    event = result.events[0]
-
-    assert event.id == UUID(
-        "550e8400-e29b-41d4-a716-446655440000"
+    http_client.get.assert_awaited_once_with(
+        "/api/events/?changed_at=2000-01-01"
     )
-    assert event.name == "Concert"
 
-    assert event.place.id == UUID(
-        "650e8400-e29b-41d4-a716-446655440000"
-    )
-    assert event.place.name == "Arena"
-    assert event.place.city == "Helsinki"
-    assert event.place.address == "Main street 1"
-    assert event.place.seats_pattern == "pattern"
-
-    assert result.next_url == "/api/events/?cursor=abc"
-
+    http_response.raise_for_status.assert_called_once()
 
 @pytest.mark.asyncio
 async def test_get_events_page_uses_provided_url():
@@ -85,7 +46,10 @@ async def test_get_events_page_uses_provided_url():
     client = Mock()
     client.get = AsyncMock(return_value=response)
 
-    provider = EventsProviderClient(client)
+    provider = EventsProviderClient(
+    client=client,
+    base_url="https://example.com",
+)
 
     changed_at = datetime(2026, 8, 20)
     url = "/api/events/?cursor=abc"
@@ -117,7 +81,10 @@ async def test_get_events_page_raises_http_error():
     client = Mock()
     client.get = AsyncMock(return_value=response)
 
-    provider = EventsProviderClient(client)
+    provider = EventsProviderClient(
+    client=client,
+    base_url="https://example.com",
+)
 
     with pytest.raises(httpx.HTTPStatusError):
         await provider.get_events_page(

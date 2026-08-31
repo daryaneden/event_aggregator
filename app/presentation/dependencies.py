@@ -9,7 +9,7 @@ from app.infrastructure.database.database import AsyncSessionFactory
 from app.application.use_cases.get_events import GetEventsUseCase
 from app.application.use_cases.get_event import GetEventUseCase
 from app.application.use_cases.sync_events import SyncEventsUseCase
-from app.application.use_cases.create_ticket_use_case import CreateTicketUseCase
+from app.application.use_cases.create_ticket import CreateTicketUseCase
 from app.application.use_cases.cancel_ticket import CancelTicketUseCase
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
 from app.infrastructure.uow.sqlalchemy_background_uow import SqlAlchemyBackgroundUnitOfWork

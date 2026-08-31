@@ -1,8 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.interfaces.uow import UnitOfWork
-from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import SqlAlchemySyncStateRepository
-from app.infrastructure.database.repositories.sqlalchemy_event_repository import SqlAlchemyEventRepository
 
 class SqlAlchemyBackgroundUnitOfWork(UnitOfWork):
 

@@ -1,4 +1,4 @@
-from datetime import date, time, datetime
+from datetime import date
 from uuid import UUID
 
 from sqlalchemy import func, select

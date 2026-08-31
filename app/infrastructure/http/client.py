@@ -11,12 +11,3 @@ def create_event_provider_client() -> AsyncClient:
         },
         follow_redirects=True
     )
-
-# def create_event_provider_client(settings: Settings) -> AsyncClient:
-#     return AsyncClient(
-#         base_url=settings.EVENT_PROVIDER_URL,
-#         headers={
-#             "x-api-key": settings.EVENT_PROVIDER_API_KEY,
-#         },
-#         follow_redirects=True,
-#     )

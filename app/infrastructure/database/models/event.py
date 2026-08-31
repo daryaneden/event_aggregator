@@ -5,7 +5,6 @@ from sqlalchemy import ForeignKey, DateTime
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from app.infrastructure.database.database import Base
 
 if TYPE_CHECKING:
     from app.infrastructure.database.models.place import PlaceModel
