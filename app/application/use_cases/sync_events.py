@@ -1,6 +1,6 @@
 import logging
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.application.interfaces.event_provider import EventsProvider
 from app.application.interfaces.uow import UnitOfWork
@@ -13,7 +13,7 @@ FIRST_SYNC_DATE = datetime(
     2000,
     1,
     1,
-    tzinfo=timezone.utc,
+    tzinfo=UTC,
 )
 
 class SyncEventsUseCase:
@@ -76,7 +76,7 @@ class SyncEventsUseCase:
 
             await uow.sync_state_repository.save(
                 SyncState(
-                    last_sync_time=datetime.now(timezone.utc),
+                    last_sync_time=datetime.now(UTC),
                     last_changed_at=last_changed_at,
                     sync_status=SyncStatus.SUCCESS,
                 )
