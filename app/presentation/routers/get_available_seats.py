@@ -3,13 +3,12 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.application.exceptions import EventNotFoundException
 from app.application.use_cases.get_available_seats import (
     GetAvailableSeatsUseCase,
 )
-from app.application.exceptions import EventNotFoundException
 from app.presentation.dependencies import get_available_seats_use_case
 from app.presentation.schemas.available_seats_response import AvailableSeatsResponse
-
 
 router = APIRouter(
     prefix="/api/events",

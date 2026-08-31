@@ -1,6 +1,9 @@
-from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
-from typing import Callable
+from collections.abc import Callable
+
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
 from app.infrastructure.uow.sqlalchemy_uow import SqlAlchemyUnitOfWork
+
 
 class SqlAlchemyUnitOfWorkFactory:
 

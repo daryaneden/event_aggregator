@@ -4,8 +4,7 @@ from datetime import datetime
 
 from app.application.interfaces.event_provider import EventsProvider
 from app.application.interfaces.uow import UnitOfWork
-from app.domain.entities.sync_state import SyncState
-from app.domain.entities.sync_state import SyncStatus
+from app.domain.entities.sync_state import SyncState, SyncStatus
 from app.infrastructure.event_provider.events_paginator import EventsPaginator
 
 logger = logging.getLogger(__name__)

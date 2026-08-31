@@ -1,7 +1,9 @@
 from dataclasses import dataclass
-from uuid import UUID
 from datetime import datetime
+from uuid import UUID
+
 from app.domain.entities.place import Place
+
 
 @dataclass
 class Event:

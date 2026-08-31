@@ -4,6 +4,7 @@ from app.application.dtos.register_ticket import RegisterTicketDTO
 from app.application.interfaces.event_provider import EventsProvider
 from app.application.interfaces.ticket_registry import TicketRegistry
 
+
 class CreateTicketUseCase:
 
     def __init__(self, provider: EventsProvider, ticket_registry: TicketRegistry):

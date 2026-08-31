@@ -1,10 +1,11 @@
-from contextlib import asynccontextmanager
 import asyncio
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.presentation.dependencies import build_sync_events_use_case_for_lifespan
 from app.infrastructure.sync_worker import sync_worker
+from app.presentation.dependencies import build_sync_events_use_case_for_lifespan
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

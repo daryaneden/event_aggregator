@@ -4,10 +4,10 @@ from uuid import UUID
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
-from app.infrastructure.database.models.event import EventModel
-from app.infrastructure.database.models.place import PlaceModel
 from app.domain.entities.event import Event
 from app.domain.entities.place import Place
+from app.infrastructure.database.models.event import EventModel
+from app.infrastructure.database.models.place import PlaceModel
 
 
 class SqlAlchemyEventRepository:

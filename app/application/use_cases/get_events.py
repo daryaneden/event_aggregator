@@ -3,6 +3,7 @@ from datetime import date
 from app.application.interfaces.event_repository import EventRepository
 from app.domain.entities.event import Event
 
+
 class GetEventsUseCase:
 
     def __init__(self, event_repository: EventRepository):

@@ -1,5 +1,7 @@
-from pydantic import BaseModel
 from uuid import UUID
+
+from pydantic import BaseModel
+
 
 class AvailableSeatsResponse(BaseModel):
     event_id: UUID

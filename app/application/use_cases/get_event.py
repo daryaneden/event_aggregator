@@ -1,8 +1,9 @@
 from uuid import UUID
 
+from app.application.exceptions import EventNotFoundException
 from app.application.interfaces.event_repository import EventRepository
 from app.domain.entities.event import Event
-from app.application.exceptions import EventNotFoundException
+
 
 class GetEventUseCase:
 

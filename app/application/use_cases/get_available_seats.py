@@ -1,8 +1,9 @@
 from uuid import UUID
 
-from app.application.interfaces.seats_cache_port import SeatsCachePort
-from app.application.interfaces.event_provider import EventsProvider
 from app.application.exceptions import EventNotFoundException
+from app.application.interfaces.event_provider import EventsProvider
+from app.application.interfaces.seats_cache_port import SeatsCachePort
+
 
 class GetAvailableSeatsUseCase:
 

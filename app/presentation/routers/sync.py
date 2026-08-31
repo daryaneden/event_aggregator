@@ -1,5 +1,6 @@
-from fastapi import APIRouter, BackgroundTasks, Depends
 from typing import Annotated
+
+from fastapi import APIRouter, BackgroundTasks, Depends
 
 from app.application.use_cases.sync_events import SyncEventsUseCase
 from app.presentation.dependencies import get_sync_events_use_case

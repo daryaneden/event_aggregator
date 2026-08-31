@@ -1,6 +1,8 @@
-from uuid import UUID
 import time
+from uuid import UUID
+
 from app.application.interfaces.seats_cache_port import SeatsCachePort
+
 
 class InMemorySeatsCache(SeatsCachePort):
 

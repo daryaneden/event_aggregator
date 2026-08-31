@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.interfaces.uow import UnitOfWork
 
+
 class SqlAlchemyBackgroundUnitOfWork(UnitOfWork):
 
     def __init__(self, factory: AsyncSession, event_repository, sync_state_repository):

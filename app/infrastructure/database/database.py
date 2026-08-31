@@ -1,6 +1,8 @@
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from typing import Any
+
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, declared_attr
+
 from app.config.setting import Settings
 
 settings = Settings()

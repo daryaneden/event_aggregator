@@ -4,6 +4,7 @@ from uuid import UUID
 
 from app.domain.entities.event import Event
 
+
 class EventRepository(ABC):
 
     @abstractmethod

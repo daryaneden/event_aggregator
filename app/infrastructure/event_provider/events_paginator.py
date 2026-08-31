@@ -1,8 +1,8 @@
 from collections.abc import AsyncIterator
 from datetime import datetime
 
-from app.domain.entities.event import Event
 from app.application.interfaces.event_provider import EventsProvider
+from app.domain.entities.event import Event
 
 
 class EventsPaginator:

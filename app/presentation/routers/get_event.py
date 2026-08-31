@@ -1,12 +1,16 @@
-from fastapi import APIRouter, Depends, HTTPException
 from typing import Annotated
 from uuid import UUID
 
-from app.presentation.schemas.event_response import EventResponse
+from fastapi import APIRouter, Depends, HTTPException
+
 from app.application.exceptions import EventNotFoundException
-from app.presentation.dependencies import get_get_event_use_case, get_event_response_mapper
 from app.application.use_cases.get_event import GetEventUseCase
+from app.presentation.dependencies import (
+    get_event_response_mapper,
+    get_get_event_use_case,
+)
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
+from app.presentation.schemas.event_response import EventResponse
 
 router = APIRouter(prefix='/api/events', tags=['get_event'])
 

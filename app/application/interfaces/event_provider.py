@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from uuid import UUID
+
 from app.application.dtos.events_page import EventsPage
 from app.application.dtos.register_ticket import RegisterTicketDTO
 

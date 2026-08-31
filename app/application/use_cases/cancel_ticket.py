@@ -1,8 +1,9 @@
 from uuid import UUID
 
+from app.application.exceptions import TicketNotFoundException
 from app.application.interfaces.event_provider import EventsProvider
 from app.application.interfaces.ticket_registry import TicketRegistry
-from app.application.exceptions import TicketNotFoundException
+
 
 class CancelTicketUseCase:
 

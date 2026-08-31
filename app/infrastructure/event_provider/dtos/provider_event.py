@@ -1,8 +1,10 @@
-from pydantic import BaseModel
 from datetime import datetime
 from uuid import UUID
 
+from pydantic import BaseModel
+
 from app.infrastructure.event_provider.dtos.provider_place import ProviderPlaceDTO
+
 
 class ProviderEventDTO(BaseModel):
     id: UUID

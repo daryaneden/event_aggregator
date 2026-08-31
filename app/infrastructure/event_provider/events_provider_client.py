@@ -1,17 +1,22 @@
-import httpx
 from datetime import datetime
 from urllib.parse import urljoin
 from uuid import UUID
 
-from app.application.interfaces.event_provider import EventsProvider
+import httpx
+
 from app.application.dtos.events_page import EventsPage
 from app.application.dtos.register_ticket import RegisterTicketDTO
+from app.application.interfaces.event_provider import EventsProvider
 from app.domain.entities.event import Event
 from app.domain.entities.place import Place
 from app.infrastructure.event_provider.dtos.provider_event import ProviderEventDTO
-from app.infrastructure.event_provider.dtos.provider_events_page import ProviderEventsPageDTO
+from app.infrastructure.event_provider.dtos.provider_events_page import (
+    ProviderEventsPageDTO,
+)
+from app.infrastructure.event_provider.dtos.provider_register_ticket import (
+    ProviderRegisterTicketDTO,
+)
 from app.infrastructure.event_provider.dtos.provider_seats import ProviderSeatsDTO
-from app.infrastructure.event_provider.dtos.provider_register_ticket import ProviderRegisterTicketDTO
 
 
 class EventsProviderClient(EventsProvider):

@@ -1,5 +1,7 @@
-from pydantic import BaseModel, Field
 from datetime import date
+
+from pydantic import BaseModel, Field
+
 
 class GetEventsRequest(BaseModel):
     date_from: date | None = None

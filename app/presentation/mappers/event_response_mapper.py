@@ -1,7 +1,8 @@
 from app.domain.entities.event import Event
+from app.presentation.schemas.event_list_response import EventListResponse
 from app.presentation.schemas.event_response import EventResponse
 from app.presentation.schemas.place_response import PlaceResponse
-from app.presentation.schemas.event_list_response import EventListResponse
+
 
 class EventResponseMapper:
 

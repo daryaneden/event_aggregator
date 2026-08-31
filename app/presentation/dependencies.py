@@ -1,27 +1,36 @@
-from app.infrastructure.event_provider.events_provider_client import EventsProviderClient
-from app.infrastructure.database.repositories.sqlalchemy_event_repository import SqlAlchemyEventRepository
-from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import SqlAlchemySyncStateRepository
+from typing import Annotated
+
+from fastapi import Depends
+from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.application.use_cases.cancel_ticket import CancelTicketUseCase
+from app.application.use_cases.create_ticket import CreateTicketUseCase
+from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
+from app.application.use_cases.get_event import GetEventUseCase
+from app.application.use_cases.get_events import GetEventsUseCase
+from app.application.use_cases.sync_events import SyncEventsUseCase
+from app.config.setting import Settings
+from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
+from app.infrastructure.database.database import AsyncSessionFactory, get_db_session
+from app.infrastructure.database.repositories.sqlalchemy_event_repository import (
+    SqlAlchemyEventRepository,
+)
+from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import (
+    SqlAlchemySyncStateRepository,
+)
+from app.infrastructure.event_provider.events_provider_client import (
+    EventsProviderClient,
+)
+from app.infrastructure.http.client import create_event_provider_client
+from app.infrastructure.in_memory_ticket_registry import InMemoryTicketRegistry
+from app.infrastructure.uow.sqlalchemy_background_uow import (
+    SqlAlchemyBackgroundUnitOfWork,
+)
 from app.infrastructure.uow.sqlalchemy_uow import SqlAlchemyUnitOfWork
 from app.infrastructure.uow.sqlalchemy_uow_factory import SqlAlchemyUnitOfWorkFactory
-from app.infrastructure.http.client import create_event_provider_client
-from app.infrastructure.database.database import get_db_session
-from app.infrastructure.database.database import AsyncSessionFactory
-from app.application.use_cases.get_events import GetEventsUseCase
-from app.application.use_cases.get_event import GetEventUseCase
-from app.application.use_cases.sync_events import SyncEventsUseCase
-from app.application.use_cases.create_ticket import CreateTicketUseCase
-from app.application.use_cases.cancel_ticket import CancelTicketUseCase
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
-from app.infrastructure.uow.sqlalchemy_background_uow import SqlAlchemyBackgroundUnitOfWork
-from app.config.setting import Settings
-from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
-from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
-from app.infrastructure.in_memory_ticket_registry import InMemoryTicketRegistry
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from httpx import AsyncClient
-from fastapi import Depends
-from typing import Annotated
 
 def get_settings():
     return Settings()

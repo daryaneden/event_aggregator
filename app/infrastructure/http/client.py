@@ -1,4 +1,5 @@
 from httpx import AsyncClient
+
 from app.config.setting import Settings
 
 settings = Settings()

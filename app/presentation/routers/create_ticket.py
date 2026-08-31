@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends
 from typing import Annotated
 
-from app.presentation.schemas.create_ticket_request import CreateTicketRequest
-from app.presentation.schemas.ticket_response import TicketResponse
+from fastapi import APIRouter, Depends
+
 from app.application.dtos.register_ticket import RegisterTicketDTO
 from app.application.use_cases.create_ticket import CreateTicketUseCase
 from app.presentation.dependencies import get_create_ticket_use_case
+from app.presentation.schemas.create_ticket_request import CreateTicketRequest
+from app.presentation.schemas.ticket_response import TicketResponse
 
 router = APIRouter(
     prefix="/api/tickets",

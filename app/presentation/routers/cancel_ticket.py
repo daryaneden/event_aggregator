@@ -10,7 +10,6 @@ from app.presentation.schemas.cancel_ticket_response import (
     CancelTicketResponse,
 )
 
-
 router = APIRouter(
     prefix="/api/tickets",
     tags=["cancel_ticket"],

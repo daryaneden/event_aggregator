@@ -1,5 +1,6 @@
-from dataclasses import dataclass 
-from uuid import UUID 
+from dataclasses import dataclass
+from uuid import UUID
+
 
 @dataclass(frozen=True) 
 class RegisterTicketDTO: 
