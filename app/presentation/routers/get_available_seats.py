@@ -7,7 +7,7 @@ from app.application.exceptions import EventNotFoundException
 from app.application.use_cases.get_available_seats import (
     GetAvailableSeatsUseCase,
 )
-from app.presentation.dependencies import get_available_seats_use_case
+from app.presentation.dependencies import get_get_available_seats_use_case
 from app.presentation.schemas.available_seats_response import AvailableSeatsResponse
 
 router = APIRouter(
@@ -24,7 +24,7 @@ async def get_available_seats(
     event_id: UUID,
     use_case: Annotated[
         GetAvailableSeatsUseCase,
-        Depends(get_available_seats_use_case),
+        Depends(get_get_available_seats_use_case),
     ],
 ):
     try:
@@ -36,4 +36,5 @@ async def get_available_seats(
             detail=str(e),
         )
 
-    return AvailableSeatsResponse(event_id=event_id, available_seats=seats)
+    return AvailableSeatsResponse(event_id=event_id, 
+                                  available_seats=seats)

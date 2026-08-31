@@ -96,7 +96,7 @@ def build_uow(session: AsyncSession) -> SqlAlchemyUnitOfWork:
     )
 seats_cache = InMemorySeatsCache()
 
-async def get_available_seats_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)]) -> GetAvailableSeatsUseCase:
+async def get_get_available_seats_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)]) -> GetAvailableSeatsUseCase:
     return GetAvailableSeatsUseCase(
         provider=provider,
         cache=seats_cache,
