@@ -3,4 +3,4 @@ from uuid import UUID
 
 class AvailableSeatsResponse(BaseModel):
     event_id: UUID
-    seats: list[str]
+    available_seats: list[str]
