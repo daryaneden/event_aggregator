@@ -4,7 +4,7 @@ import pytest
 from uuid import uuid4
 import inspect
 
-from app.application.models.events_page import EventsPage
+from app.application.dtos.events_page import EventsPage
 from app.domain.entities.event import Event
 from app.domain.entities.place import Place
 from app.infrastructure.event_provider.events_paginator import EventsPaginator

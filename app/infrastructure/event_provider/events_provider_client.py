@@ -4,10 +4,14 @@ from urllib.parse import urljoin
 from uuid import UUID
 
 from app.application.interfaces.event_provider import EventsProvider
-from app.application.models.events_page import EventsPage
+from app.application.dtos.events_page import EventsPage
+from app.application.dtos.register_ticket import RegisterTicketDTO
 from app.domain.entities.event import Event
 from app.domain.entities.place import Place
-from app.infrastructure.event_provider.dtos import ProviderEventDTO, ProviderEventsPageDTO, ProviderSeatsDTO
+from app.infrastructure.event_provider.dtos.provider_event import ProviderEventDTO
+from app.infrastructure.event_provider.dtos.provider_events_page import ProviderEventsPageDTO
+from app.infrastructure.event_provider.dtos.provider_seats import ProviderSeatsDTO
+from app.infrastructure.event_provider.dtos.provider_register_ticket import ProviderRegisterTicketDTO
 
 
 class EventsProviderClient(EventsProvider):
@@ -86,3 +90,24 @@ class EventsProviderClient(EventsProvider):
         dto = ProviderSeatsDTO.model_validate(response.json())
 
         return dto.seats
+
+    async def register_ticket(
+    self,
+    data: RegisterTicketDTO,
+) -> UUID:
+
+        response = await self.client.post(
+            f"/api/events/{data.event_id}/register/",
+            json=ProviderRegisterTicketDTO(
+                first_name=data.first_name,
+                last_name=data.last_name,
+                seat=data.seat,
+                email=data.email,
+            ).model_dump(),
+        )
+
+        response.raise_for_status()
+
+        response_data = response.json()
+
+        return UUID(response_data["ticket_id"])

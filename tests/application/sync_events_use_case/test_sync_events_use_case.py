@@ -11,7 +11,7 @@ from app.domain.entities.event import Event
 from app.domain.entities.place import Place
 from app.domain.entities.sync_state import SyncState
 from app.domain.entities.sync_state import SyncStatus
-from app.application.models.events_page import EventsPage
+from app.application.dtos.events_page import EventsPage
 
 
 def create_event(

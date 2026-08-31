@@ -18,4 +18,4 @@ async def sync_worker(use_case: SyncEventsUseCase) -> None:
         except Exception:
             logger.exception("Scheduled events synchronization failed")
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(24*60*60)

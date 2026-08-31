@@ -2,9 +2,7 @@ from collections.abc import AsyncIterator
 from datetime import datetime
 
 from app.domain.entities.event import Event
-from app.domain.entities.place import Place
 from app.application.interfaces.event_provider import EventsProvider
-from app.infrastructure.event_provider.dtos import (ProviderEventDTO)
 
 
 class EventsPaginator:
