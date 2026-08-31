@@ -10,7 +10,7 @@ class InMemorySeatsCache(SeatsCachePort):
         self._cache: dict[UUID, tuple[float, list[str]]] = {}
 
     def get (self, event_id: UUID):
-        item = self._cache.get[event_id]
+        item = self._cache.get(event_id)
 
         if item is None:
             return None
