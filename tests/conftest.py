@@ -1,8 +1,9 @@
 from unittest.mock import AsyncMock, Mock
 
 import pytest
+import pytest_asyncio
 
-@pytest.fixture
+@pytest_asyncio.fixture
 def http_client():
     client = Mock()
     client.get = AsyncMock()
