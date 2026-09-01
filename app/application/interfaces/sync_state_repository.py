@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from app.domain.entities.sync_state import SyncState
 
+
 class SyncStateRepository(ABC):
 
     @abstractmethod

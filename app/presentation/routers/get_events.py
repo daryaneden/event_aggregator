@@ -3,7 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from app.application.use_cases.get_events import GetEventsUseCase
-from app.presentation.dependencies import get_event_response_mapper, get_get_events_use_case
+from app.presentation.dependencies import (
+    get_event_response_mapper,
+    get_get_events_use_case,
+)
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
 from app.presentation.schemas.get_events_request import GetEventsRequest
 

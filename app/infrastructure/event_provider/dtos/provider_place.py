@@ -3,6 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+
 class ProviderPlaceDTO(BaseModel):
     id: UUID
     name: str

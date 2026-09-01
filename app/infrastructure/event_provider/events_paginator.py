@@ -4,6 +4,7 @@ from datetime import datetime
 from app.application.interfaces.events_provider import EventsProvider
 from app.domain.entities.event import Event
 
+
 class EventsPaginator:
 
     def __init__(self, provider: EventsProvider, 

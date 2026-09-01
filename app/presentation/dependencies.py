@@ -13,15 +13,24 @@ from app.application.use_cases.sync_events import SyncEventsUseCase
 from app.config.setting import Settings
 from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
 from app.infrastructure.database.database import AsyncSessionFactory, get_db_session
-from app.infrastructure.database.repositories.sqlalchemy_event_repository import SqlAlchemyEventRepository
-from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import SqlAlchemySyncStateRepository
-from app.infrastructure.event_provider.events_provider_client import EventsProviderClient
+from app.infrastructure.database.repositories.sqlalchemy_event_repository import (
+    SqlAlchemyEventRepository,
+)
+from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import (
+    SqlAlchemySyncStateRepository,
+)
+from app.infrastructure.event_provider.events_provider_client import (
+    EventsProviderClient,
+)
 from app.infrastructure.http.client import create_event_provider_client
 from app.infrastructure.in_memory_ticket_registry import InMemoryTicketRegistry
-from app.infrastructure.uow.sqlalchemy_background_uow import SqlAlchemyBackgroundUnitOfWork
+from app.infrastructure.uow.sqlalchemy_background_uow import (
+    SqlAlchemyBackgroundUnitOfWork,
+)
 from app.infrastructure.uow.sqlalchemy_uow import SqlAlchemyUnitOfWork
 from app.infrastructure.uow.sqlalchemy_uow_factory import SqlAlchemyUnitOfWorkFactory
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
+
 
 def get_settings() -> Settings:
     return Settings()

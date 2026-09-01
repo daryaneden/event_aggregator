@@ -3,6 +3,7 @@ from uuid import UUID
 
 from app.application.interfaces.seats_cache_port import SeatsCachePort
 
+
 class InMemorySeatsCache(SeatsCachePort):
 
     def __init__(self, ttl: int = 30):

@@ -10,8 +10,12 @@ from app.application.interfaces.events_provider import EventsProvider
 from app.domain.entities.event import Event
 from app.domain.entities.place import Place
 from app.infrastructure.event_provider.dtos.provider_event import ProviderEventDTO
-from app.infrastructure.event_provider.dtos.provider_events_page import ProviderEventsPageDTO
-from app.infrastructure.event_provider.dtos.provider_register_ticket import ProviderRegisterTicketDTO
+from app.infrastructure.event_provider.dtos.provider_events_page import (
+    ProviderEventsPageDTO,
+)
+from app.infrastructure.event_provider.dtos.provider_register_ticket import (
+    ProviderRegisterTicketDTO,
+)
 from app.infrastructure.event_provider.dtos.provider_seats import ProviderSeatsDTO
 
 
