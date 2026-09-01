@@ -10,7 +10,8 @@ from app.presentation.dependencies import (
     get_get_available_seats_use_case,
     get_get_event_use_case,
     get_event_response_mapper,
-    get_sync_events_use_case
+    get_sync_events_use_case,
+    get_get_events_use_case
 )
 
 
@@ -32,6 +33,9 @@ def get_available_seats_use_case():
 def get_event_use_case():
     return AsyncMock()
 
+@pytest.fixture
+def get_events_use_case():
+    return AsyncMock()
 
 @pytest.fixture
 def event_response_mapper():
@@ -48,7 +52,8 @@ async def client(
     get_available_seats_use_case,
     get_event_use_case,
     event_response_mapper,
-    sync_events_use_case
+    sync_events_use_case,
+    get_events_use_case
 ):
     app.dependency_overrides[get_cancel_ticket_use_case] = (
         lambda: cancel_ticket_use_case
@@ -70,6 +75,10 @@ async def client(
 
     app.dependency_overrides[get_sync_events_use_case] = (
     lambda: sync_events_use_case
+)
+
+    app.dependency_overrides[get_get_events_use_case] = (
+    lambda: get_events_use_case
 )
 
     transport = ASGITransport(app=app)

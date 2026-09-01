@@ -76,7 +76,7 @@ async def test_get_event_returns_404_when_event_not_found(
     event_id = uuid4()
 
     get_event_use_case.execute.side_effect = EventNotFoundException(
-        detail="Event not found"
+        event_id
     )
 
     response = await client.get(f"/api/events/{event_id}")
