@@ -83,7 +83,7 @@ async def test_get_event_returns_404_when_event_not_found(
 
     assert response.status_code == 404
     assert response.json() == {
-        "detail": "Event not found"
+        'detail': f'Event {event_id} is not found'
     }
 
     get_event_use_case.execute.assert_awaited_once_with(event_id)
