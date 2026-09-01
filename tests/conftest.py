@@ -1,9 +1,8 @@
 from unittest.mock import AsyncMock, Mock
 
 import pytest
-import pytest_asyncio
 
-@pytest_asyncio.fixture
+@pytest.fixture
 def http_client():
     client = Mock()
     client.get = AsyncMock()
@@ -15,21 +14,6 @@ def http_client():
 @pytest.fixture
 def base_url():
     return "https://example.com"
-
-
-# @pytest.fixture
-# def events_provider(http_client, base_url):
-
-#     return EventsProviderClient(
-#         client=http_client,
-#         base_url=base_url,
-#     )
-
-# @pytest.fixture
-# def http_response():
-#     response = Mock()
-#     response.raise_for_status = Mock()
-#     return response
 
 @pytest.fixture
 def provider_event():
