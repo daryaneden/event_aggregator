@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 
@@ -13,7 +13,7 @@ async def test_save_and_get_sync_state(
 ):
     sync_state = SyncState(
         last_sync_time=datetime(2026, 8, 28, 12, 0),
-        last_changed_at=datetime(2026, 8, 28, 11, 30),
+        last_changed_at=datetime(2026, 8, 28, 11, 30, tzinfo=timezone.utc),
         sync_status=SyncStatus.SUCCESS,
     )
 
