@@ -7,7 +7,7 @@ from app.infrastructure.database.database import Base
 
 
 class SyncStateModel(Base):
-    __tablename__ = "sync_state"
+    __tablename__ = 'sync_state'
 
     id: Mapped[int] = mapped_column(primary_key=True)
     last_changed_at: Mapped[datetime|None] = mapped_column(DateTime(timezone=True), nullable=True)

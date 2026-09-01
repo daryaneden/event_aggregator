@@ -57,3 +57,13 @@ def unit_of_work(sync_state_repository, event_repository):
 def uow_factory(unit_of_work):
     factory = Mock(return_value=unit_of_work)
     return factory
+
+@pytest.fixture
+def patch_events_paginator(monkeypatch):
+
+    def patch(paginator):
+
+        monkeypatch.setattr('app.application.use_cases.sync_events.EventsPaginator',
+                            paginator)
+
+    return patch

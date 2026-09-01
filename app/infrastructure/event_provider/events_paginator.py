@@ -1,13 +1,14 @@
 from collections.abc import AsyncIterator
 from datetime import datetime
 
-from app.application.interfaces.event_provider import EventsProvider
+from app.application.interfaces.events_provider import EventsProvider
 from app.domain.entities.event import Event
-
 
 class EventsPaginator:
 
-    def __init__(self, provider: EventsProvider, changed_at: datetime):
+    def __init__(self, provider: EventsProvider, 
+                 changed_at: datetime):
+        
         self.provider = provider
         self.changed_at = changed_at
 

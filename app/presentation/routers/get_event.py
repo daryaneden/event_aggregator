@@ -5,10 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from app.application.exceptions import EventNotFoundException
 from app.application.use_cases.get_event import GetEventUseCase
-from app.presentation.dependencies import (
-    get_event_response_mapper,
-    get_get_event_use_case,
-)
+from app.presentation.dependencies import get_event_response_mapper, get_get_event_use_case
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
 from app.presentation.schemas.event_response import EventResponse
 

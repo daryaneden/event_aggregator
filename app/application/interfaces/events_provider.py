@@ -9,19 +9,17 @@ from app.application.dtos.register_ticket import RegisterTicketDTO
 class EventsProvider(ABC):
 
     @abstractmethod
-    async def get_events_page(self, changed_at: datetime, url: str | None = None) -> EventsPage:
+    async def get_events_page(self, 
+                              changed_at: datetime, 
+                              url: str | None = None) -> EventsPage:
         pass
 
     @abstractmethod
-    async def get_available_seats(
-        self,
-        event_id: UUID,
-    ) -> list[str] | None:
-        pass
+    async def get_available_seats(self,
+        event_id: UUID) -> list[str] | None: pass
 
-    async def register_ticket(
-    self,
-    data: RegisterTicketDTO) -> UUID:
+    @abstractmethod
+    async def register_ticket(self) -> UUID:
         pass
 
     @abstractmethod

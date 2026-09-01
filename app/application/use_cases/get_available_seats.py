@@ -1,19 +1,20 @@
 from uuid import UUID
 
 from app.application.exceptions import EventNotFoundException
-from app.application.interfaces.event_provider import EventsProvider
+from app.application.interfaces.events_provider import EventsProvider
 from app.application.interfaces.seats_cache_port import SeatsCachePort
 
 
 class GetAvailableSeatsUseCase:
 
     def __init__(self, provider: EventsProvider,
-        cache: SeatsCachePort):
+                 cache: SeatsCachePort):
 
         self.provider = provider
         self.cache = cache
 
     async def execute(self, event_id: UUID) -> list[str]:
+        
         seats = self.cache.get(event_id)
 
         if seats is not None:

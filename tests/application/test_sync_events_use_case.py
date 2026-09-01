@@ -9,13 +9,12 @@ from app.domain.entities.sync_state import SyncStatus
 
 
 @pytest.mark.asyncio
-async def test_execute_syncs_events_successfully(
-    provider,
-    uow_factory,
-    event_repository,
-    sync_state_repository,
-    monkeypatch,
-):
+async def test_execute_syncs_events_successfully(provider,
+                                                 uow_factory,
+                                                 event_repository,
+                                                 sync_state_repository,
+                                                 patch_events_paginator):
+    
     sync_state_repository.get.return_value = None
 
     event_1 = Mock()
@@ -35,15 +34,10 @@ async def test_execute_syncs_events_successfully(
 
             return iterate()
 
-    monkeypatch.setattr(
-        "app.application.use_cases.sync_events.EventsPaginator",
-        FakePaginator,
-    )
+    patch_events_paginator(FakePaginator)
 
-    use_case = SyncEventsUseCase(
-        provider=provider,
-        uow_factory=uow_factory,
-    )
+    use_case = SyncEventsUseCase(provider=provider,
+                                 uow_factory=uow_factory)
 
     await use_case.execute()
 
@@ -59,25 +53,22 @@ async def test_execute_syncs_events_successfully(
 
 
 @pytest.mark.asyncio
-async def test_execute_uses_existing_last_changed_at(
-    provider,
-    uow_factory,
-    sync_state_repository,
-    monkeypatch,
-):
+async def test_execute_uses_existing_last_changed_at(provider,
+                                                     uow_factory,
+                                                     sync_state_repository,
+                                                     patch_events_paginator):
+    
     previous_changed_at = datetime(2026, 8, 20, 10, 0)
 
-    sync_state_repository.get.return_value = SyncState(
-        last_sync_time=datetime(2026, 8, 20, 11, 0),
-        last_changed_at=previous_changed_at,
-        sync_status=SyncStatus.SUCCESS,
-    )
+    sync_state_repository.get.return_value = SyncState(last_sync_time=datetime(2026, 8, 20, 11, 0),
+                                                       last_changed_at=previous_changed_at,
+                                                       sync_status=SyncStatus.SUCCESS)
 
     paginator_args = {}
 
     class FakePaginator:
         def __init__(self, provider, changed_at):
-            paginator_args["changed_at"] = changed_at
+            paginator_args['changed_at'] = changed_at
 
         def __aiter__(self):
             async def iterate():
@@ -86,28 +77,20 @@ async def test_execute_uses_existing_last_changed_at(
 
             return iterate()
 
-    monkeypatch.setattr(
-        "app.application.use_cases.sync_events.EventsPaginator",
-        FakePaginator,
-    )
+    patch_events_paginator(FakePaginator)
 
-    use_case = SyncEventsUseCase(
-        provider=provider,
-        uow_factory=uow_factory,
-    )
+    use_case = SyncEventsUseCase(provider=provider,
+                                 uow_factory=uow_factory)
 
     await use_case.execute()
 
-    assert paginator_args["changed_at"] == previous_changed_at
-
+    assert paginator_args['changed_at'] == previous_changed_at
 
 @pytest.mark.asyncio
-async def test_execute_sets_failed_status_when_sync_fails(
-    provider,
-    uow_factory,
-    sync_state_repository,
-    monkeypatch,
-):
+async def test_execute_sets_failed_status_when_sync_fails(provider,
+                                                          uow_factory,
+                                                          sync_state_repository,
+                                                          patch_events_paginator):
     sync_state_repository.get.return_value = None
 
     class FakePaginator:
@@ -116,28 +99,20 @@ async def test_execute_sets_failed_status_when_sync_fails(
 
         def __aiter__(self):
             async def iterate():
-                raise RuntimeError("provider error")
+                raise RuntimeError('provider error')
                 yield
 
             return iterate()
 
-    monkeypatch.setattr(
-        "app.application.use_cases.sync_events.EventsPaginator",
-        FakePaginator,
-    )
+    patch_events_paginator(FakePaginator)
 
-    use_case = SyncEventsUseCase(
-        provider=provider,
-        uow_factory=uow_factory,
-    )
+    use_case = SyncEventsUseCase(provider=provider,
+                                 uow_factory=uow_factory)
 
-    with pytest.raises(RuntimeError, match="provider error"):
+    with pytest.raises(RuntimeError, match='provider error'):
         await use_case.execute()
 
-    saved_states = [
-        call.args[0]
-        for call in sync_state_repository.save.await_args_list
-    ]
+    saved_states = [call.args[0] for call in sync_state_repository.save.await_args_list]
 
     statuses = [state.sync_status for state in saved_states]
 

@@ -2,7 +2,6 @@ from datetime import date
 
 from pydantic import BaseModel, Field
 
-
 class GetEventsRequest(BaseModel):
     date_from: date | None = None
     page: int = Field(default=1, ge=1)

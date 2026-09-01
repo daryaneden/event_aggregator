@@ -11,12 +11,12 @@ if TYPE_CHECKING:
     from app.infrastructure.database.models.place import PlaceModel
 
 class EventModel(Base):
-    __tablename__ = "events"
+    __tablename__ = 'events'
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(nullable=False)
-    place_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("places.id"), nullable=False)
-    place: Mapped["PlaceModel"] = relationship( "PlaceModel", back_populates="events")
+    place_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('places.id'), nullable=False)
+    place: Mapped['PlaceModel'] = relationship( 'PlaceModel', back_populates='events')
     event_time: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     registration_deadline: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     status: Mapped[str] = mapped_column()

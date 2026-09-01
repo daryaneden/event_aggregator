@@ -28,11 +28,9 @@ class SqlAlchemySyncStateRepository(SyncStateRepository):
 
         if model is None:
 
-            model = SyncStateModel(
-                last_sync_time=sync_state.last_sync_time,
-                last_changed_at=sync_state.last_changed_at,
-                sync_status=sync_state.sync_status,
-            )
+            model = SyncStateModel(last_sync_time=sync_state.last_sync_time,
+                                   last_changed_at=sync_state.last_changed_at,
+                                   sync_status=sync_state.sync_status)
 
             self.session.add(model)
 
@@ -42,10 +40,8 @@ class SqlAlchemySyncStateRepository(SyncStateRepository):
             model.last_changed_at = sync_state.last_changed_at
             model.sync_status = sync_state.sync_status
 
-    @staticmethod
-    async def _to_domain (model: SyncStateModel) -> SyncState:
+    async def _to_domain (self, model: SyncStateModel) -> SyncState:
 
-        return SyncState(
-        last_sync_time=model.last_sync_time,
-        last_changed_at=model.last_changed_at,
-        sync_status=model.sync_status)
+        return SyncState(last_sync_time=model.last_sync_time,
+                         last_changed_at=model.last_changed_at,
+                         sync_status=model.sync_status)

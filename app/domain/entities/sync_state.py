@@ -2,12 +2,11 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 
-
 class SyncStatus(str, Enum):
-    NEVER_RUN = "never_run"
-    RUNNING = "running"
-    SUCCESS = "success"
-    FAILED = "failed"
+    NEVER_RUN = 'never_run'
+    RUNNING = 'running'
+    SUCCESS = 'success'
+    FAILED = 'failed'
 
 
 @dataclass

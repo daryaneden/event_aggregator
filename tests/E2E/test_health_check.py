@@ -3,9 +3,9 @@ import pytest
 
 @pytest.mark.asyncio
 async def test_health_check_returns_ok(client):
-    response = await client.get("/api/health")
+    response = await client.get('/api/health')
 
     assert response.status_code == 200
     assert response.json() == {
-        "status": "ok",
+        'status': 'ok',
     }

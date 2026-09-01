@@ -5,7 +5,6 @@ from pydantic import BaseModel, ConfigDict
 
 from app.presentation.schemas.place_response import PlaceResponse
 
-
 class EventResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

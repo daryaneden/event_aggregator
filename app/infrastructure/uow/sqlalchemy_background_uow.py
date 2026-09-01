@@ -2,7 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.interfaces.uow import UnitOfWork
 
-
 class SqlAlchemyBackgroundUnitOfWork(UnitOfWork):
 
     def __init__(self, factory: AsyncSession, event_repository, sync_state_repository):
@@ -15,12 +14,7 @@ class SqlAlchemyBackgroundUnitOfWork(UnitOfWork):
         await self.session.begin()
         return self
 
-    async def __aexit__(
-        self,
-        exc_type,
-        exc_value,
-        traceback,
-    ):
+    async def __aexit__(self, exc_type, exc_value, traceback):
         try:
             if exc_type is not None:
                 await self.session.rollback()
