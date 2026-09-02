@@ -75,7 +75,7 @@ class EventsProviderClient(EventsProvider):
 
         dto = ProviderSeatsDTO.model_validate(response.json())
 
-        return dto.seats
+        return dto.available_seats
 
     async def register_ticket(self, data: RegisterTicketDTO) -> UUID:
 
