@@ -1,10 +1,11 @@
+from unittest.mock import AsyncMock
 from uuid import UUID
 
 import pytest
-from unittest.mock import AsyncMock
 
-from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
 from app.application.exceptions import EventNotFoundException
+from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
+
 
 @pytest.mark.asyncio
 async def test_get_available_seats_returns_cached_seats(provider,

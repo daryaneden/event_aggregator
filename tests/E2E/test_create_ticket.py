@@ -1,7 +1,9 @@
-import pytest
 from uuid import uuid4
 
+import pytest
+
 from app.application.dtos.register_ticket import RegisterTicketDTO
+
 
 @pytest.mark.asyncio
 async def test_register_ticket_returns_ticket_id(client,

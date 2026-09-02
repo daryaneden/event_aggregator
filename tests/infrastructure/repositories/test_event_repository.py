@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from uuid import uuid4
 
 import pytest
@@ -25,8 +25,8 @@ async def test_save_and_get_by_id(
             address="Main street 1",
             seats_pattern="pattern",
         ),
-        event_time=datetime(2026, 9, 10, 18, 0, tzinfo=timezone.utc),
-        registration_deadline=datetime(2026, 8, 30, 18, 0, tzinfo=timezone.utc),
+        event_time=datetime(2026, 9, 10, 18, 0, tzinfo=UTC),
+        registration_deadline=datetime(2026, 8, 30, 18, 0, tzinfo=UTC),
         status="active",
         number_of_visitors=100,
         changed_at=datetime(2026, 8, 20, 10, 0),
@@ -70,13 +70,13 @@ async def test_get_events_returns_filtered_and_paginated_events(
             address="Main street 1",
             seats_pattern="pattern",
         ),
-        event_time=datetime(2026, 9, 1, 18, 0, tzinfo=timezone.utc),
-        registration_deadline=datetime(2026, 8, 30, 18, 0, tzinfo=timezone.utc),
+        event_time=datetime(2026, 9, 1, 18, 0, tzinfo=UTC),
+        registration_deadline=datetime(2026, 8, 30, 18, 0, tzinfo=UTC),
         status="active",
         number_of_visitors=100,
-        changed_at=datetime(2026, 8, 20, 10, 0, tzinfo=timezone.utc),
-        created_at=datetime(2026, 8, 1, 10, 0, tzinfo=timezone.utc),
-        status_changed_at=datetime(2026, 8, 20, 10, 0, tzinfo=timezone.utc),
+        changed_at=datetime(2026, 8, 20, 10, 0, tzinfo=UTC),
+        created_at=datetime(2026, 8, 1, 10, 0, tzinfo=UTC),
+        status_changed_at=datetime(2026, 8, 20, 10, 0, tzinfo=UTC),
     )
 
     event_2 = Event(
@@ -89,13 +89,13 @@ async def test_get_events_returns_filtered_and_paginated_events(
             address="Second street 2",
             seats_pattern="pattern",
         ),
-        event_time=datetime(2026, 9, 10, 18, 0, tzinfo=timezone.utc),
-        registration_deadline=datetime(2026, 9, 8, 18, 0, tzinfo=timezone.utc),
+        event_time=datetime(2026, 9, 10, 18, 0, tzinfo=UTC),
+        registration_deadline=datetime(2026, 9, 8, 18, 0, tzinfo=UTC),
         status="active",
         number_of_visitors=50,
-        changed_at=datetime(2026, 8, 21, 10, 0, tzinfo=timezone.utc),
-        created_at=datetime(2026, 8, 2, 10, 0, tzinfo=timezone.utc),
-        status_changed_at=datetime(2026, 8, 21, 10, 0, tzinfo=timezone.utc)
+        changed_at=datetime(2026, 8, 21, 10, 0, tzinfo=UTC),
+        created_at=datetime(2026, 8, 2, 10, 0, tzinfo=UTC),
+        status_changed_at=datetime(2026, 8, 21, 10, 0, tzinfo=UTC)
     )
 
     event_3 = Event(
@@ -108,13 +108,13 @@ async def test_get_events_returns_filtered_and_paginated_events(
             address="Old street 3",
             seats_pattern="pattern",
         ),
-        event_time=datetime(2026, 8, 1, 18, 0, tzinfo=timezone.utc),
-        registration_deadline=datetime(2026, 7, 30, 18, 0, tzinfo=timezone.utc),
+        event_time=datetime(2026, 8, 1, 18, 0, tzinfo=UTC),
+        registration_deadline=datetime(2026, 7, 30, 18, 0, tzinfo=UTC),
         status="finished",
         number_of_visitors=30,
-        changed_at=datetime(2026, 8, 1, 10, 0, tzinfo=timezone.utc),
-        created_at=datetime(2026, 7, 1, 10, 0, tzinfo=timezone.utc),
-        status_changed_at=datetime(2026, 8, 1, 10, 0, tzinfo=timezone.utc)
+        changed_at=datetime(2026, 8, 1, 10, 0, tzinfo=UTC),
+        created_at=datetime(2026, 7, 1, 10, 0, tzinfo=UTC),
+        status_changed_at=datetime(2026, 8, 1, 10, 0, tzinfo=UTC)
     )
 
     await event_repository.save(event_1)
@@ -132,4 +132,4 @@ async def test_get_events_returns_filtered_and_paginated_events(
     assert total == 2
     assert len(events) == 1
     assert events[0].name == "Conference"
-    assert events[0].event_time == datetime(2026, 9, 10, 18, 0, tzinfo=timezone.utc)
+    assert events[0].event_time == datetime(2026, 9, 10, 18, 0, tzinfo=UTC)

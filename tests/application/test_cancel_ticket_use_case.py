@@ -1,10 +1,11 @@
-from uuid import UUID
 from unittest.mock import AsyncMock
+from uuid import UUID
 
 import pytest
 
-from app.application.use_cases.cancel_ticket import CancelTicketUseCase
 from app.application.exceptions import TicketNotFoundException
+from app.application.use_cases.cancel_ticket import CancelTicketUseCase
+
 
 @pytest.mark.asyncio
 async def test_cancel_ticket_cancels_ticket_and_removes_it(provider,

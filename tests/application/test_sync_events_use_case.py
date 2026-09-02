@@ -4,8 +4,7 @@ from unittest.mock import Mock
 import pytest
 
 from app.application.use_cases.sync_events import SyncEventsUseCase
-from app.domain.entities.sync_state import SyncState
-from app.domain.entities.sync_state import SyncStatus
+from app.domain.entities.sync_state import SyncState, SyncStatus
 
 
 @pytest.mark.asyncio

@@ -1,8 +1,9 @@
+import inspect
 from datetime import datetime
 from unittest.mock import AsyncMock, Mock
-import pytest
 from uuid import uuid4
-import inspect
+
+import pytest
 
 from app.application.dtos.events_page import EventsPage
 from app.domain.entities.event import Event

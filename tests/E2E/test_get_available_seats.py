@@ -1,7 +1,9 @@
-import pytest
 from uuid import uuid4
 
+import pytest
+
 from app.application.exceptions import EventNotFoundException
+
 
 @pytest.mark.asyncio
 async def test_get_available_seats_returns_seats(client,

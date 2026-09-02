@@ -4,6 +4,7 @@ import pytest
 
 from app.application.use_cases.get_events import GetEventsUseCase
 
+
 @pytest.mark.asyncio
 async def test_get_events_returns_events_and_total(event_repository):
 

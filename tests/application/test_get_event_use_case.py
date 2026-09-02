@@ -3,8 +3,8 @@ from uuid import UUID
 
 import pytest
 
-from app.application.use_cases.get_event import GetEventUseCase
 from app.application.exceptions import EventNotFoundException
+from app.application.use_cases.get_event import GetEventUseCase
 
 
 @pytest.mark.asyncio

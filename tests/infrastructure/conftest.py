@@ -1,13 +1,20 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from app.infrastructure.database.database import Base
-
-from app.infrastructure.event_provider.events_provider_client import EventsProviderClient
-from app.infrastructure.database.repositories.sqlalchemy_event_repository import SqlAlchemyEventRepository
-from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import SqlAlchemySyncStateRepository
 from unittest.mock import AsyncMock, Mock
 
 import pytest
 import pytest_asyncio
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+
+from app.infrastructure.database.database import Base
+from app.infrastructure.database.repositories.sqlalchemy_event_repository import (
+    SqlAlchemyEventRepository,
+)
+from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import (
+    SqlAlchemySyncStateRepository,
+)
+from app.infrastructure.event_provider.events_provider_client import (
+    EventsProviderClient,
+)
+
 
 @pytest.fixture
 def http_client():

@@ -5,13 +5,16 @@ import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 
 from app.main import app
-from app.presentation.dependencies import (get_cancel_ticket_use_case,
-                                           get_create_ticket_use_case,
-                                           get_get_available_seats_use_case,
-                                           get_get_event_use_case,
-                                           get_event_response_mapper,
-                                           get_sync_events_use_case,
-                                           get_get_events_use_case)
+from app.presentation.dependencies import (
+    get_cancel_ticket_use_case,
+    get_create_ticket_use_case,
+    get_event_response_mapper,
+    get_get_available_seats_use_case,
+    get_get_event_use_case,
+    get_get_events_use_case,
+    get_sync_events_use_case,
+)
+
 
 @pytest.fixture
 def cancel_ticket_use_case():

@@ -5,8 +5,8 @@ import pytest
 
 from app.domain.entities.event import Event
 from app.domain.entities.place import Place
-from app.presentation.schemas.event_response import EventResponse
 from app.presentation.schemas.event_list_response import EventListResponse
+from app.presentation.schemas.event_response import EventResponse
 from app.presentation.schemas.place_response import PlaceResponse
 
 

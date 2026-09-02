@@ -1,9 +1,8 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
-from app.domain.entities.sync_state import SyncState
-from app.domain.entities.sync_state import SyncStatus
+from app.domain.entities.sync_state import SyncState, SyncStatus
 
 
 @pytest.mark.asyncio
@@ -13,7 +12,7 @@ async def test_save_and_get_sync_state(
 ):
     sync_state = SyncState(
         last_sync_time=datetime(2026, 8, 28, 12, 0),
-        last_changed_at=datetime(2026, 8, 28, 11, 30, tzinfo=timezone.utc),
+        last_changed_at=datetime(2026, 8, 28, 11, 30, tzinfo=UTC),
         sync_status=SyncStatus.SUCCESS,
     )
 

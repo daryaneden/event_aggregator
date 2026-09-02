@@ -1,10 +1,14 @@
 from datetime import datetime
 from unittest.mock import AsyncMock, Mock
-import pytest
-import httpx
 from uuid import UUID
 
-from app.infrastructure.event_provider.events_provider_client import EventsProviderClient
+import httpx
+import pytest
+
+from app.infrastructure.event_provider.events_provider_client import (
+    EventsProviderClient,
+)
+
 
 @pytest.mark.asyncio
 async def test_get_events_page_returns_events_page(

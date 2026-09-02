@@ -1,6 +1,7 @@
 
 from app.infrastructure.uow.sqlalchemy_uow import SqlAlchemyUnitOfWork
 
+
 def test_unit_of_work_provides_repositories(
     test_session,
     event_repository,

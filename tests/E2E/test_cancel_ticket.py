@@ -1,7 +1,9 @@
-import pytest
 from uuid import uuid4
 
+import pytest
+
 from app.application.exceptions import TicketNotFoundException
+
 
 @pytest.mark.asyncio
 async def test_cancel_ticket_returns_success(client,
