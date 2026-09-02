@@ -11,7 +11,6 @@ from app.presentation.schemas.available_seats_response import AvailableSeatsResp
 router = APIRouter(prefix='/api/events', tags=['get_seats'])
 
 @router.get('/{event_id}/seats', response_model=AvailableSeatsResponse)
-
 async def get_available_seats(event_id: UUID,
                               use_case: Annotated[GetAvailableSeatsUseCase, Depends(get_get_available_seats_use_case)]):
 

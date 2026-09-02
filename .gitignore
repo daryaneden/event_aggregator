@@ -1,0 +1,6 @@
+**/__pycache__/
+*.env
+*.config.py
+app/config/settings.py
+*.pyc
+.DS_Store

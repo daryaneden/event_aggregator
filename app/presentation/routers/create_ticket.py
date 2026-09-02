@@ -11,7 +11,6 @@ from app.presentation.schemas.ticket_response import TicketResponse
 router = APIRouter(prefix="/api/tickets", tags=["tickets"])
 
 @router.post("", response_model=TicketResponse, status_code=201)
-
 async def register_ticket(request: CreateTicketRequest,
                           use_case: Annotated[CreateTicketUseCase, Depends(get_create_ticket_use_case)]):
 

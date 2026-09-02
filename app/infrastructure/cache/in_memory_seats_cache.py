@@ -11,7 +11,7 @@ class InMemorySeatsCache(SeatsCachePort):
         self.ttl = ttl
         self._cache: dict[UUID, tuple[float, list[str]]] = {}
 
-    def get (self, event_id: UUID):
+    def get(self, event_id: UUID):
         item = self._cache.get(event_id)
 
         if item is None:
@@ -25,5 +25,5 @@ class InMemorySeatsCache(SeatsCachePort):
 
         return seats
 
-    def set (self, event_id: UUID, seats: list[str]) -> None:
+    def set(self, event_id: UUID, seats: list[str]) -> None:
         self._cache[event_id] = (time.monotonic(), seats)
