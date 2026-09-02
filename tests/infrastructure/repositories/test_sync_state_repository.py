@@ -10,11 +10,9 @@ async def test_save_and_get_sync_state(
     sync_state_repository,
     test_session,
 ):
-    sync_state = SyncState(
-        last_sync_time=datetime(2026, 8, 28, 12, 0),
-        last_changed_at=datetime(2026, 8, 28, 11, 30, tzinfo=UTC),
-        sync_status=SyncStatus.SUCCESS,
-    )
+    sync_state = SyncState(last_sync_time=datetime(2026, 8, 28, 12, 0, tzinfo=UTC),
+                           last_changed_at=datetime(2026, 8, 28, 11, 30, tzinfo=UTC),
+                           sync_status=SyncStatus.SUCCESS)
 
     await sync_state_repository.save(sync_state)
     await test_session.commit()
