@@ -51,7 +51,7 @@ def ticket_repository():
     return repository
 
 @pytest.fixture
-def outbox_repository(test_session):
+def outbox_repository():
     repository = AsyncMock()
     repository.save = AsyncMock(return_value=None)
     return repository
