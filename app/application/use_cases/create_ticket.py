@@ -5,6 +5,7 @@ from app.application.interfaces.events_provider import EventsProvider
 from app.application.interfaces.uow_factory import UnitOfWorkFactory
 from app.domain.entities.ticket import Ticket
 
+
 class CreateTicketUseCase:
 
     def __init__(self, provider: EventsProvider, 

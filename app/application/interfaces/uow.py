@@ -4,6 +4,7 @@ from app.application.interfaces.event_repository import EventRepository
 from app.application.interfaces.sync_state_repository import SyncStateRepository
 from app.application.interfaces.ticket_repository import TicketRepository
 
+
 class UnitOfWork(ABC):
 
     event_repository: EventRepository

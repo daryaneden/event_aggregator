@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.domain.entities.ticket import Ticket
 from app.application.interfaces.ticket_repository import TicketRepository
+from app.domain.entities.ticket import Ticket
 from app.infrastructure.database.models.ticket import TicketModel
 
 

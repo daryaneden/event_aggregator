@@ -2,8 +2,9 @@ from collections.abc import Callable
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from app.infrastructure.uow.sqlalchemy_uow import SqlAlchemyUnitOfWork
 from app.application.interfaces.uow_factory import UnitOfWorkFactory
+from app.infrastructure.uow.sqlalchemy_uow import SqlAlchemyUnitOfWork
+
 
 class SqlAlchemyUnitOfWorkFactory(UnitOfWorkFactory):
 
