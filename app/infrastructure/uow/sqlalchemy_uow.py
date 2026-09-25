@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.interfaces.event_repository import EventRepository
 from app.application.interfaces.sync_state_repository import SyncStateRepository
+from app.application.interfaces.ticket_repository import TicketRepository
 from app.application.interfaces.uow import UnitOfWork
 
 
@@ -9,13 +10,13 @@ class SqlAlchemyUnitOfWork(UnitOfWork):
 
     def __init__(self, session: AsyncSession, 
                  event_repository: EventRepository, 
-                 sync_state_repository: SyncStateRepository):
+                 sync_state_repository: SyncStateRepository,
+                 ticket_repository: TicketRepository):
         
         self.session = session
-
         self.event_repository = event_repository
-
         self.sync_state_repository = sync_state_repository
+        self.ticket_repository = ticket_repository
 
     async def __aenter__(self):
 

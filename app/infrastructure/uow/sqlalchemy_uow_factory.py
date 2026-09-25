@@ -3,9 +3,9 @@ from collections.abc import Callable
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.infrastructure.uow.sqlalchemy_uow import SqlAlchemyUnitOfWork
+from app.application.interfaces.uow_factory import UnitOfWorkFactory
 
-
-class SqlAlchemyUnitOfWorkFactory:
+class SqlAlchemyUnitOfWorkFactory(UnitOfWorkFactory):
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession],
                  uow_builder: Callable[[AsyncSession], SqlAlchemyUnitOfWork]):
