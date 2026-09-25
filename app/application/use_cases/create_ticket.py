@@ -2,7 +2,6 @@ from uuid import UUID
 
 from app.application.dtos.register_ticket import RegisterTicketDTO
 from app.application.interfaces.events_provider import EventsProvider
-from app.application.interfaces.ticket_registry import TicketRegistry
 from app.application.interfaces.uow_factory import UnitOfWorkFactory
 from app.domain.entities.ticket import Ticket
 
