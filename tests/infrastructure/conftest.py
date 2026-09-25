@@ -5,15 +5,10 @@ import pytest_asyncio
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.infrastructure.database.database import Base
-from app.infrastructure.database.repositories.sqlalchemy_event_repository import (
-    SqlAlchemyEventRepository,
-)
-from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import (
-    SqlAlchemySyncStateRepository,
-)
-from app.infrastructure.event_provider.events_provider_client import (
-    EventsProviderClient,
-)
+from app.infrastructure.database.repositories.sqlalchemy_event_repository import SqlAlchemyEventRepository
+from app.infrastructure.database.repositories.sqlalchemy_sync_state_repository import SqlAlchemySyncStateRepository
+from app.infrastructure.database.repositories.sqlalchemy_ticket_repository import SqlAlchemyTicketRepository
+from app.infrastructure.event_provider.events_provider_client import EventsProviderClient
 
 
 @pytest.fixture
@@ -105,3 +100,7 @@ def event_repository(test_session):
 @pytest.fixture
 def sync_state_repository(test_session):
     return SqlAlchemySyncStateRepository(test_session)
+
+@pytest.fixture
+def ticket_repository(test_session):
+    return SqlAlchemyTicketRepository(test_session)
