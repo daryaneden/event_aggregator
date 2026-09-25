@@ -1,10 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.interfaces.event_repository import EventRepository
+from app.application.interfaces.outbox_repository import OutboxRepository
 from app.application.interfaces.sync_state_repository import SyncStateRepository
 from app.application.interfaces.ticket_repository import TicketRepository
 from app.application.interfaces.uow import UnitOfWork
-from app.application.interfaces.outbox_repository import OutboxRepository
 
 
 class SqlAlchemyUnitOfWork(UnitOfWork):
