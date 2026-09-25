@@ -4,6 +4,7 @@ from app.application.interfaces.event_repository import EventRepository
 from app.application.interfaces.sync_state_repository import SyncStateRepository
 from app.application.interfaces.ticket_repository import TicketRepository
 from app.application.interfaces.uow import UnitOfWork
+from app.application.interfaces.outbox_repository import OutboxRepository
 
 
 class SqlAlchemyUnitOfWork(UnitOfWork):
@@ -11,12 +12,14 @@ class SqlAlchemyUnitOfWork(UnitOfWork):
     def __init__(self, session: AsyncSession, 
                  event_repository: EventRepository, 
                  sync_state_repository: SyncStateRepository,
-                 ticket_repository: TicketRepository):
+                 ticket_repository: TicketRepository,
+                 outbox_repository: OutboxRepository):
         
         self.session = session
         self.event_repository = event_repository
         self.sync_state_repository = sync_state_repository
         self.ticket_repository = ticket_repository
+        self.outbox_repository = outbox_repository
 
     async def __aenter__(self):
 

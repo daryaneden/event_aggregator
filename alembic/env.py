@@ -10,6 +10,7 @@ from app.infrastructure.database.models.place import PlaceModel
 from app.infrastructure.database.models.event import EventModel
 from app.infrastructure.database.models.sync_state import SyncStateModel
 from app.infrastructure.database.models.ticket import TicketModel
+from app.infrastructure.database.models.outbox_event import OutboxEventModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

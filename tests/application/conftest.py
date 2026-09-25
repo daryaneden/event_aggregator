@@ -51,11 +51,18 @@ def ticket_repository():
     return repository
 
 @pytest.fixture
-def unit_of_work(sync_state_repository, event_repository, ticket_repository):
+def outbox_repository(test_session):
+    repository = AsyncMock()
+    repository.save = AsyncMock(return_value=None)
+    return repository
+
+@pytest.fixture
+def unit_of_work(sync_state_repository, event_repository, ticket_repository, outbox_repository):
     uow = AsyncMock()
     uow.sync_state_repository = sync_state_repository
     uow.event_repository = event_repository
     uow.ticket_repository = ticket_repository
+    uow.outbox_repository = outbox_repository
     uow.__aenter__.return_value = uow
     uow.__aexit__.return_value = None
     return uow

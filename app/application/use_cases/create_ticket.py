@@ -4,6 +4,7 @@ from app.application.dtos.register_ticket import RegisterTicketDTO
 from app.application.interfaces.events_provider import EventsProvider
 from app.application.interfaces.uow_factory import UnitOfWorkFactory
 from app.domain.entities.ticket import Ticket
+from app.application.dtos.outbox_message import OutboxMessageDto
 
 
 class CreateTicketUseCase:
@@ -27,5 +28,13 @@ class CreateTicketUseCase:
 
         async with self.uow_factory() as uow:
             await uow.ticket_repository.save(ticket)
+
+            await uow.outbox_repository.save(OutboxMessageDto(event_type="ticket_registered",
+                                                               payload={"ticket_id": str(ticket.id),
+                                                                        "event_id": str(ticket.event_id),
+                                                                        "first_name": ticket.first_name,
+                                                                        "last_name": ticket.last_name,
+                                                                        "email": ticket.email,
+                                                                        "seat": ticket.seat}))
 
         return ticket_id
