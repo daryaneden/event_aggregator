@@ -11,7 +11,7 @@ async def test_get_ticket_by_idempotency_key(
     ticket_repository,
     create_event,
 ):
-    await create_event(test_session, provider_event)
+    await create_event(provider_event)
 
     ticket = Ticket(
         id=uuid4(),
