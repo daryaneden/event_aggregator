@@ -15,3 +15,4 @@ class TicketModel(Base):
     last_name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
     seat: Mapped[str] = mapped_column(nullable=False)
+    idempotency_key: Mapped[str | None] = mapped_column(unique=True, nullable=True)

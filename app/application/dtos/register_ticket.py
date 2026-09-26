@@ -9,3 +9,4 @@ class RegisterTicketDTO:
     last_name: str 
     email: str 
     seat: str
+    idempotency_key: str | None = None

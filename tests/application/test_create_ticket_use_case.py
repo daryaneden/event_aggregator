@@ -1,11 +1,11 @@
 from unittest.mock import AsyncMock
-from uuid import UUID
+from uuid import UUID, uuid4
 
 import pytest
-from httpx import HTTPStatusError
 
 from app.application.dtos.register_ticket import RegisterTicketDTO
 from app.application.use_cases.create_ticket import CreateTicketUseCase
+from app.domain.entities.ticket import Ticket
 
 @pytest.mark.asyncio
 async def test_create_ticket_returns_ticket_id_and_saves_ticket_and_outbox_message(
@@ -87,3 +87,47 @@ async def test_create_ticket_does_not_save_ticket_or_outbox_when_provider_fails(
 
     unit_of_work.ticket_repository.save.assert_not_awaited()
     unit_of_work.outbox_repository.save.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_create_ticket_returns_existing_ticket_for_same_idempotency_key(
+    provider,
+    uow_factory,
+    unit_of_work,
+):
+    existing_ticket = Ticket(
+        id=uuid4(),
+        event_id=uuid4(),
+        first_name="John",
+        last_name="Doe",
+        email="john@example.com",
+        seat="A1",
+    )
+
+    data = RegisterTicketDTO(
+        event_id=existing_ticket.event_id,
+        first_name=existing_ticket.first_name,
+        last_name=existing_ticket.last_name,
+        email=existing_ticket.email,
+        seat=existing_ticket.seat,
+        idempotency_key="test-key",
+    )
+
+    unit_of_work.ticket_repository.get_by_idempotency_key = AsyncMock(
+        return_value=existing_ticket,
+    )
+
+    use_case = CreateTicketUseCase(
+        provider=provider,
+        uow_factory=uow_factory,
+    )
+
+    result = await use_case.execute(data)
+
+    assert result == existing_ticket.id
+
+    provider.register_ticket.assert_not_awaited()
+    unit_of_work.ticket_repository.save.assert_not_awaited()
+    unit_of_work.outbox_repository.save.assert_not_awaited()
+
+    unit_of_work.ticket_repository.get_by_idempotency_key.assert_awaited_once_with("test-key")

@@ -12,3 +12,6 @@ class TicketNotFoundException(Exception):
     def __init__(self, ticket_id: UUID):
         self.detail = f'Ticket {ticket_id} not found'
         self.ticket_id = ticket_id
+
+class TicketIdempotencyConflict(Exception):
+    pass
