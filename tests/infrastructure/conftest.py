@@ -1,4 +1,6 @@
 from unittest.mock import AsyncMock, Mock
+from uuid import UUID
+from datetime import datetime
 
 import pytest
 import pytest_asyncio
@@ -11,6 +13,8 @@ from app.infrastructure.database.repositories.sqlalchemy_ticket_repository impor
 from app.infrastructure.database.repositories.sqlalchemy_outbox_repository import SqlAlchemyOutboxRepository
 from app.infrastructure.event_provider.events_provider_client import EventsProviderClient
 from app.presentation.dependencies import build_uow
+from app.infrastructure.database.models.event import EventModel
+from app.infrastructure.database.models.place import PlaceModel
 
 @pytest.fixture
 def http_client():
@@ -112,3 +116,46 @@ def outbox_repository(test_session):
 @pytest.fixture
 def uow(test_session):
     return build_uow(test_session)
+
+@pytest_asyncio.fixture
+async def create_event(test_session):
+
+    async def _create_event(provider_event):
+        place_data = provider_event["place"]
+
+        place = PlaceModel(
+            id=UUID(place_data["id"]),
+            name=place_data["name"],
+            city=place_data["city"],
+            address=place_data["address"],
+            seats_pattern=place_data["seats_pattern"],
+        )
+
+        event = EventModel(
+            id=UUID(provider_event["id"]),
+            name=provider_event["name"],
+            place_id=place.id,
+            event_time=datetime.fromisoformat(
+                provider_event["event_time"],
+            ),
+            registration_deadline=datetime.fromisoformat(
+                provider_event["registration_deadline"],
+            ),
+            status=provider_event["status"],
+            number_of_visitors=provider_event["number_of_visitors"],
+            changed_at=datetime.fromisoformat(
+                provider_event["changed_at"],
+            ),
+            created_at=datetime.fromisoformat(
+                provider_event["created_at"],
+            ),
+            status_changed_at=datetime.fromisoformat(
+                provider_event["status_changed_at"],
+            ),
+        )
+
+        test_session.add(place)
+        test_session.add(event)
+        await test_session.commit()
+
+    return _create_event
