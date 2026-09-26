@@ -11,7 +11,7 @@ from app.infrastructure.database.models.outbox_event import OutboxEventModel
 class SqlAlchemyOutboxRepository(OutboxRepository):
 
     def __init__(self, session: AsyncSession):
-        self._session = session
+        self.session = session
 
     async def save(self, message: OutboxMessageDto) -> None:
         outbox_event = OutboxEventModel(
@@ -22,4 +22,4 @@ class SqlAlchemyOutboxRepository(OutboxRepository):
             created_at=datetime.now(UTC),
         )
 
-        self._session.add(outbox_event)
+        self.session.add(outbox_event)

@@ -22,7 +22,7 @@ class SqlAlchemyTicketRepository(TicketRepository):
         self.session.add(model)
 
     async def get_by_idempotency_key(self, idempotency_key: str) -> Ticket | None:
-        result = await self._session.execute(select(TicketModel).where(TicketModel.idempotency_key == idempotency_key))
+        result = await self.session.execute(select(TicketModel).where(TicketModel.idempotency_key == idempotency_key))
 
         ticket_model = result.scalar_one_or_none()
 
