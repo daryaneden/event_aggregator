@@ -28,6 +28,7 @@ async def register_ticket(request: CreateTicketRequest,
     except TicketIdempotencyConflict:
             raise HTTPException(status_code=409)
 
-    print(">>> HEADER:", repr(idempotency_key))
+    print(">>> HEADERS:", dict(request.headers))
+    print(">>> IDEMPOTENCY KEY:", repr(idempotency_key))
 
     return TicketResponse(ticket_id=ticket_id)
