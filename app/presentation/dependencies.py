@@ -108,10 +108,10 @@ def get_create_ticket_use_case(provider: Annotated[EventsProviderClient, Depends
                                uow_factory=uow_factory)
 
 def get_cancel_ticket_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)],
-                               ticket_repository: Annotated[SqlAlchemyTicketRepository, Depends(get_sqlalchemy_ticket_repository)]) -> CancelTicketUseCase:
+                               uow_factory: Annotated[SqlAlchemyUnitOfWorkFactory, Depends(get_uow_factory)]) -> CancelTicketUseCase:
 
     return CancelTicketUseCase(provider=provider,
-                               ticket_repository=ticket_repository)
+                               uow_factory=uow_factory)
 
 #lifespan dependencies 
 
