@@ -2,21 +2,22 @@ from uuid import UUID
 
 from app.application.exceptions import TicketNotFoundException
 from app.application.interfaces.events_provider import EventsProvider
-from app.application.interfaces.ticket_repository import TicketRepository
+from app.application.interfaces.uow_factory import UnitOfWorkFactory
 
 
 class CancelTicketUseCase:
 
     def __init__(self,
         provider: EventsProvider,
-        ticket_repository: TicketRepository):
+        uow_factory: UnitOfWorkFactory):
 
         self.provider = provider
-        self.ticket_registry = ticket_repository
+        self.uow_factory = uow_factory
 
     async def execute(self, ticket_id: UUID) -> None:
 
         async with self.uow_factory() as uow:
+            
             ticket = await uow.ticket_repository.get_by_id(ticket_id)
 
             if ticket is None:
