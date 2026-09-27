@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.application.dtos.register_ticket import RegisterTicketDTO
 from app.application.exceptions import TicketIdempotencyConflict
@@ -13,9 +13,7 @@ router = APIRouter(prefix="/api/tickets", tags=["tickets"])
 
 @router.post("", response_model=TicketResponse, status_code=201)
 async def register_ticket(request: CreateTicketRequest,
-                          http_request: Request,
-                          use_case: Annotated[CreateTicketUseCase, Depends(get_create_ticket_use_case)],
-                          idempotency_key: str | None = Header(default=None)):
+                          use_case: Annotated[CreateTicketUseCase, Depends(get_create_ticket_use_case)]):
     
     data = RegisterTicketDTO(event_id=request.event_id,
                             first_name=request.first_name,
@@ -28,8 +26,5 @@ async def register_ticket(request: CreateTicketRequest,
 
     except TicketIdempotencyConflict:
             raise HTTPException(status_code=409)
-
-    print(">>> HEADERS:", dict(http_request.headers))
-    print(">>> IDEMPOTENCY KEY:", repr(idempotency_key))
 
     return TicketResponse(ticket_id=ticket_id)

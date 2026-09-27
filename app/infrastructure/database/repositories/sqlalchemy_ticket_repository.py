@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -23,6 +25,21 @@ class SqlAlchemyTicketRepository(TicketRepository):
 
     async def get_by_idempotency_key(self, idempotency_key: str) -> Ticket | None:
         result = await self.session.execute(select(TicketModel).where(TicketModel.idempotency_key == idempotency_key))
+
+        ticket_model = result.scalar_one_or_none()
+
+        if ticket_model is None:
+            return None
+
+        return Ticket(id=ticket_model.id,
+            event_id=ticket_model.event_id,
+            first_name=ticket_model.first_name,
+            last_name=ticket_model.last_name,
+            email=ticket_model.email,
+            seat=ticket_model.seat)
+
+    async def get_by_id(self, ticket_id: UUID) -> Ticket | None:
+        result = await self.session.execute(select(TicketModel).where(TicketModel.id == ticket_id))
 
         ticket_model = result.scalar_one_or_none()
 

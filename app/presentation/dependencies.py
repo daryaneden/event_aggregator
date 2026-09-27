@@ -98,8 +98,8 @@ def get_get_available_seats_use_case(provider: Annotated[EventsProviderClient, D
 
 ticket_registry = InMemoryTicketRegistry()
 
-def get_ticket_registry():
-    return ticket_registry
+def get_sqlalchemy_ticket_repository(session: Annotated[AsyncSession, Depends(get_db_session)]):
+    return SqlAlchemyTicketRepository(session)
 
 def get_create_ticket_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)],
                                 uow_factory: Annotated[SqlAlchemyUnitOfWorkFactory, Depends(get_uow_factory)]) -> CreateTicketUseCase:
@@ -107,10 +107,11 @@ def get_create_ticket_use_case(provider: Annotated[EventsProviderClient, Depends
     return CreateTicketUseCase(provider=provider,
                                uow_factory=uow_factory)
 
-def get_cancel_ticket_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)]) -> CancelTicketUseCase:
+def get_cancel_ticket_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)],
+                               ticket_repository: Annotated[SqlAlchemyTicketRepository, Depends(get_sqlalchemy_ticket_repository)]) -> CancelTicketUseCase:
 
     return CancelTicketUseCase(provider=provider,
-                               ticket_registry=get_ticket_registry())
+                               ticket_repository=ticket_repository)
 
 #lifespan dependencies 
 
