@@ -18,6 +18,8 @@ class CreateTicketUseCase:
 
     async def execute(self, data: RegisterTicketDTO) -> UUID:
 
+        print("IDEMPOTENCY KEY:", data.idempotency_key)
+
         async with self.uow_factory() as uow:
 
             if data.idempotency_key:

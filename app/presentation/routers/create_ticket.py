@@ -15,7 +15,7 @@ router = APIRouter(prefix="/api/tickets", tags=["tickets"])
 async def register_ticket(request: CreateTicketRequest,
                           use_case: Annotated[CreateTicketUseCase, Depends(get_create_ticket_use_case)],
                           idempotency_key: str | None = Header(default=None)):
-        
+    
     data = RegisterTicketDTO(event_id=request.event_id,
                             first_name=request.first_name,
                             last_name=request.last_name,
@@ -27,5 +27,7 @@ async def register_ticket(request: CreateTicketRequest,
 
     except TicketIdempotencyConflict:
             raise HTTPException(status_code=409)
+
+    print(">>> HEADER:", repr(idempotency_key))
 
     return TicketResponse(ticket_id=ticket_id)
