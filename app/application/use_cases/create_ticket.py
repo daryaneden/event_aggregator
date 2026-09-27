@@ -29,7 +29,7 @@ class CreateTicketUseCase:
 
                 if existing_ticket:
                     if not self._is_same_request(data, existing_ticket):
-                        raise TicketIdempotencyConflict()
+                        raise TicketIdempotencyConflict
 
                     return existing_ticket.id
 
