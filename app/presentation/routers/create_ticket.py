@@ -22,7 +22,7 @@ async def register_ticket(request: CreateTicketRequest,
                             last_name=request.last_name,
                             email=request.email,
                             seat=request.seat,
-                            idempotency_key=idempotency_key)
+                            idempotency_key=request.idempotency_key)
     try: 
         ticket_id = await use_case.execute(data)
 

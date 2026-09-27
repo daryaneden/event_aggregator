@@ -9,3 +9,4 @@ class CreateTicketRequest(BaseModel):
     last_name: str 
     email: EmailStr 
     seat: str 
+    idempotency_key: str | None = None
