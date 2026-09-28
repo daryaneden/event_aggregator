@@ -7,7 +7,8 @@ class Settings(BaseSettings):
                                       env_file_encoding='utf-8')
      
     EVENT_PROVIDER_URL: str 
-    EVENT_PROVIDER_API_KEY: str 
+    EVENT_PROVIDER_API_KEY: str
+    CAPASHINO_CLIENT_URL: str 
     POSTGRES_HOST: str = 'db'
     POSTGRES_PORT: int = 5432
     POSTGRES_USERNAME: str = 'postgres'

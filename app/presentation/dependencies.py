@@ -9,9 +9,11 @@ from app.application.use_cases.create_ticket import CreateTicketUseCase
 from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
 from app.application.use_cases.get_event import GetEventUseCase
 from app.application.use_cases.get_events import GetEventsUseCase
+from app.application.use_cases.proccess_outbox_use_case import ProcessOutboxUseCase
 from app.application.use_cases.sync_events import SyncEventsUseCase
 from app.config.setting import Settings
 from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
+from app.infrastructure.capashino import CapashinoClient
 from app.infrastructure.database.database import AsyncSessionFactory, get_db_session
 from app.infrastructure.database.repositories.sqlalchemy_event_repository import (
     SqlAlchemyEventRepository,
@@ -28,7 +30,8 @@ from app.infrastructure.database.repositories.sqlalchemy_ticket_repository impor
 from app.infrastructure.event_provider.events_provider_client import (
     EventsProviderClient,
 )
-from app.infrastructure.http.client import create_event_provider_client
+from app.infrastructure.http.capashino_client import create_capashino_client
+from app.infrastructure.http.provider_client import create_event_provider_client
 from app.infrastructure.in_memory_ticket_registry import InMemoryTicketRegistry
 from app.infrastructure.uow.sqlalchemy_background_uow import (
     SqlAlchemyBackgroundUnitOfWork,
@@ -47,6 +50,10 @@ def get_async_session_factory():
 def get_events_provider_client(client: Annotated[AsyncClient, Depends(create_event_provider_client)],
                                      settings: Annotated[Settings, Depends(get_settings)]) -> EventsProviderClient:
     return EventsProviderClient(client, base_url=settings.EVENT_PROVIDER_URL)
+
+def get_capashino_client(client: Annotated[AsyncClient, Depends(create_capashino_client)],
+                                     settings: Annotated[Settings, Depends(get_settings)]) -> CapashinoClient:
+    return CapashinoClient(client, base_url=settings.CAPASHINO_CLIENT_URL)
 
 def get_sqlalchemy_event_repository(session: Annotated[AsyncSession, Depends(get_db_session)]) -> SqlAlchemyEventRepository:
     return SqlAlchemyEventRepository(session)
@@ -124,4 +131,13 @@ def build_events_provider_client_for_lifespan() -> EventsProviderClient:
 
 def build_sync_events_use_case_for_lifespan() -> SyncEventsUseCase:
     return SyncEventsUseCase(provider=build_events_provider_client_for_lifespan(),
+                             uow_factory=get_uow_factory())
+
+def build_capashino_client_for_lifespan() -> CapashinoClient:
+    client = create_capashino_client()
+
+    return CapashinoClient(client)
+
+def build_proccess_outbox_use_case_for_lifespan() -> ProcessOutboxUseCase:
+    return ProcessOutboxUseCase(notification_client=build_capashino_client_for_lifespan(),
                              uow_factory=get_uow_factory())
