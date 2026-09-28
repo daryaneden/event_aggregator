@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from app.infrastructure.outbox_worker import outbox_worker
 from app.infrastructure.sync_worker import sync_worker
 from app.presentation.dependencies import (
-    build_process_outbox_use_case_for_lifespan,
+    build_proccess_outbox_use_case_for_lifespan,
     build_sync_events_use_case_for_lifespan,
 )
 
@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
         sync_worker(sync_use_case)
     )
 
-    outbox_use_case = build_process_outbox_use_case_for_lifespan()
+    outbox_use_case = build_proccess_outbox_use_case_for_lifespan()
     outbox_task = asyncio.create_task(
         outbox_worker(outbox_use_case)
     )
