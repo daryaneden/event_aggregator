@@ -49,6 +49,7 @@ jobs:
     env:
         EVENT_PROVIDER_URL: "http://test-provider"
         EVENT_PROVIDER_API_KEY: "test-api-key"
+        CAPASHINO_CLIENT_URL: "http://test-capashino"
 
     steps:
       - name: Checkout code
@@ -83,6 +84,7 @@ jobs:
     env:
         EVENT_PROVIDER_URL: "http://test-provider"
         EVENT_PROVIDER_API_KEY: "test-api-key"
+        CAPASHINO_CLIENT_URL: "http://test-capashino"
 
     services:
       postgres:
@@ -136,6 +138,7 @@ jobs:
     env:
         EVENT_PROVIDER_URL: "http://test-provider"
         EVENT_PROVIDER_API_KEY: "test-api-key"
+        CAPASHINO_CLIENT_URL: "http://test-capashino"
 
     steps:
       - name: Checkout code
