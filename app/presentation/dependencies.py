@@ -51,9 +51,8 @@ def get_events_provider_client(client: Annotated[AsyncClient, Depends(create_eve
                                      settings: Annotated[Settings, Depends(get_settings)]) -> EventsProviderClient:
     return EventsProviderClient(client, base_url=settings.EVENT_PROVIDER_URL)
 
-def get_capashino_client(client: Annotated[AsyncClient, Depends(create_capashino_client)],
-                                     settings: Annotated[Settings, Depends(get_settings)]) -> CapashinoClient:
-    return CapashinoClient(client, base_url=settings.CAPASHINO_CLIENT_URL)
+def get_capashino_client(client: Annotated[AsyncClient, Depends(create_capashino_client)]) -> CapashinoClient:
+    return CapashinoClient(client)
 
 def get_sqlalchemy_event_repository(session: Annotated[AsyncSession, Depends(get_db_session)]) -> SqlAlchemyEventRepository:
     return SqlAlchemyEventRepository(session)
