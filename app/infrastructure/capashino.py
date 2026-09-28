@@ -17,6 +17,15 @@ class CapashinoClient(NotificationClient):
         reference_id: str,
         idempotency_key: str,
     ) -> None:
+
+        payload = {
+            "message": message,
+            "reference_id": reference_id,
+            "idempotency_key": idempotency_key,
+        }
+
+        print("CAPASHINO PAYLOAD:", payload)
+        
         response = await self.client.post(
             "/api/notifications",
             json={
