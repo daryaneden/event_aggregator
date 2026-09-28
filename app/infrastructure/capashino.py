@@ -26,4 +26,8 @@ class CapashinoClient(NotificationClient):
             },
         )
 
+        print("CAPASHINO STATUS:", response.status_code)
+        print("CAPASHINO RESPONSE:", response.text)
+
+
         response.raise_for_status()
