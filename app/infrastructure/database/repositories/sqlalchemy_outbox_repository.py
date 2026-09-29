@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.dtos.outbox_message import OutboxMessageDto, PendingOutboxMessage
@@ -33,4 +33,8 @@ class SqlAlchemyOutboxRepository(OutboxRepository):
                                      payload=event.payload) for event in events]
 
     async def mark_as_sent(self, event_id: UUID) -> None:
-        pass
+        await self.session.execute(
+            update(OutboxEventModel)
+            .where(OutboxEventModel.id == event_id)
+            .values(status="sent")
+    )
