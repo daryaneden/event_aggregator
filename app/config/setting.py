@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     EVENT_PROVIDER_URL: str 
     EVENT_PROVIDER_API_KEY: str
     CAPASHINO_CLIENT_URL: str 
+    SENTRY_DSN: str
+    
     POSTGRES_HOST: str = 'db'
     POSTGRES_PORT: int = 5432
     POSTGRES_USERNAME: str = 'postgres'

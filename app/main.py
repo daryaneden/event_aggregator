@@ -1,6 +1,8 @@
+import sentry_sdk
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 
+from app.config.setting import Settings
 from app.presentation.exception_handlers import validation_exception_handler
 from app.presentation.lifespan import lifespan
 from app.presentation.routers.cancel_ticket import router as cancel_ticket_router
@@ -13,6 +15,10 @@ from app.presentation.routers.get_events import router as events_router
 from app.presentation.routers.health_check import router as health_check_router
 from app.presentation.routers.sync import router as sync_router
 
+settings = Settings()
+
+sentry_sdk.init(dsn=settings.SENTRY_DSN)
+
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(health_check_router)
@@ -24,3 +30,7 @@ app.include_router(create_ticket_router)
 app.include_router(cancel_ticket_router)
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
+
+@app.get("/test-sentry")
+async def test_sentry():
+    raise RuntimeError("Test error from events-aggregator")

@@ -19,8 +19,6 @@ class ProcessOutboxUseCase:
 
         async with self.uow_factory() as uow:
             messages = await uow.outbox_repository.get_pending()
-
-        print("PENDING MESSAGES:", len(messages))
         
         for message in messages:
 
@@ -31,8 +29,6 @@ class ProcessOutboxUseCase:
 
                 payload = message.payload
 
-                print("PROCESSING OUTBOX:", message.id)
-
                 await self.notification_client.send_notification(
                     message=(
                         "Вы успешно зарегистрированы "
@@ -42,8 +38,6 @@ class ProcessOutboxUseCase:
                     idempotency_key=str(message.id),
                 )
 
-                print("NOTIFICATION SENT:", message.id)
-
                 async with self.uow_factory() as uow:
 
                     print("MARKING AS SENT:", message.id)
@@ -51,8 +45,6 @@ class ProcessOutboxUseCase:
                     await uow.outbox_repository.mark_as_sent(
                         message.id,
                     )
-
-                print("OUTBOX MARKED AS SENT:", message.id)
 
             except Exception:
                 logger.exception(
