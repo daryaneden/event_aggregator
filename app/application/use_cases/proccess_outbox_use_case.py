@@ -1,6 +1,9 @@
+import logging
+
 from app.application.interfaces.notification_client import NotificationClient
 from app.application.interfaces.uow_factory import UnitOfWorkFactory
 
+logger = logging.getLogger(__name__)
 
 class ProcessOutboxUseCase:
 
@@ -24,27 +27,35 @@ class ProcessOutboxUseCase:
             if message.event_type != "ticket_registered":
                 continue
 
-            payload = message.payload
+            try:
 
-            print("PROCESSING OUTBOX:", message.id)
+                payload = message.payload
 
-            await self.notification_client.send_notification(
-                message=(
-                    "Вы успешно зарегистрированы "
-                    "на мероприятие"
-                ),
-                reference_id=payload["ticket_id"],
-                idempotency_key=str(message.id),
-            )
+                print("PROCESSING OUTBOX:", message.id)
 
-            print("NOTIFICATION SENT:", message.id)
-
-            async with self.uow_factory() as uow:
-
-                print("MARKING AS SENT:", message.id)
-
-                await uow.outbox_repository.mark_as_sent(
-                    message.id,
+                await self.notification_client.send_notification(
+                    message=(
+                        "Вы успешно зарегистрированы "
+                        "на мероприятие"
+                    ),
+                    reference_id=payload["ticket_id"],
+                    idempotency_key=str(message.id),
                 )
 
-            print("OUTBOX MARKED AS SENT:", message.id)
+                print("NOTIFICATION SENT:", message.id)
+
+                async with self.uow_factory() as uow:
+
+                    print("MARKING AS SENT:", message.id)
+
+                    await uow.outbox_repository.mark_as_sent(
+                        message.id,
+                    )
+
+                print("OUTBOX MARKED AS SENT:", message.id)
+
+            except Exception:
+                logger.exception(
+                    "Failed to process outbox message %s",
+                    message.id,
+            )
