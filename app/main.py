@@ -1,6 +1,7 @@
 import sentry_sdk
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from sentry_sdk.integrations.fastapi import FastApiIntegration
 
 from app.config.setting import Settings
 from app.presentation.exception_handlers import validation_exception_handler
@@ -17,7 +18,9 @@ from app.presentation.routers.sync import router as sync_router
 
 settings = Settings()
 
-sentry_sdk.init(dsn=settings.SENTRY_DSN)
+sentry_sdk.init(dsn=settings.SENTRY_DSN, 
+                debug=True,
+                integrations=[FastApiIntegration()])
 
 app = FastAPI(lifespan=lifespan)
 

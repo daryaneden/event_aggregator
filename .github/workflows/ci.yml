@@ -50,7 +50,7 @@ jobs:
         EVENT_PROVIDER_URL: "http://test-provider"
         EVENT_PROVIDER_API_KEY: "test-api-key"
         CAPASHINO_CLIENT_URL: "http://test-capashino"
-        SENTRY_DSN: "http://test-glitchtip"
+        SENTRY_DSN: "http://test-public-key@test-sentry/1"
 
     steps:
       - name: Checkout code
@@ -86,7 +86,7 @@ jobs:
         EVENT_PROVIDER_URL: "http://test-provider"
         EVENT_PROVIDER_API_KEY: "test-api-key"
         CAPASHINO_CLIENT_URL: "http://test-capashino"
-        SENTRY_DSN: "http://test-glitchtip"
+        SENTRY_DSN: "http://test-public-key@test-sentry/1"
 
     services:
       postgres:
@@ -141,7 +141,7 @@ jobs:
         EVENT_PROVIDER_URL: "http://test-provider"
         EVENT_PROVIDER_API_KEY: "test-api-key"
         CAPASHINO_CLIENT_URL: "http://test-capashino"
-        SENTRY_DSN: "http://test-glitchtip"
+        SENTRY_DSN: "http://test-public-key@test-sentry/1"
 
     steps:
       - name: Checkout code
