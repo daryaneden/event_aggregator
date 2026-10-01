@@ -51,6 +51,12 @@ def ticket_repository():
     return repository
 
 @pytest.fixture
+def notification_client():
+    client = Mock()
+    client.send_notification = AsyncMock()
+    return client
+
+@pytest.fixture
 def outbox_repository():
     repository = AsyncMock()
     repository.save = AsyncMock(return_value=None)
