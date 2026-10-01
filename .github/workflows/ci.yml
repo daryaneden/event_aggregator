@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
   pull_request:
-    branches: ['main']
+    branches: ["main"]
 
 jobs:
 
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "3.13"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v6
@@ -47,10 +47,10 @@ jobs:
     needs: lint
 
     env:
-        EVENT_PROVIDER_URL: 'http://test-provider'
-        EVENT_PROVIDER_API_KEY: 'test-api-key'
-        CAPASHINO_CLIENT_URL: 'http://test-capashino'
-        SENTRY_DSN: 'http://test-public-key@test-sentry/1'
+        EVENT_PROVIDER_URL: "http://test-provider"
+        EVENT_PROVIDER_API_KEY: "test-api-key"
+        CAPASHINO_CLIENT_URL: "http://test-capashino"
+        SENTRY_DSN: "http://test-public-key@test-sentry/1"
 
     steps:
       - name: Checkout code
@@ -59,7 +59,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "3.13"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v6
@@ -83,10 +83,10 @@ jobs:
     needs: lint
 
     env:
-        EVENT_PROVIDER_URL: 'http://test-provider'
-        EVENT_PROVIDER_API_KEY: 'test-api-key'
-        CAPASHINO_CLIENT_URL: 'http://test-capashino'
-        SENTRY_DSN: 'http://test-public-key@test-sentry/1'
+        EVENT_PROVIDER_URL: "http://test-provider"
+        EVENT_PROVIDER_API_KEY: "test-api-key"
+        CAPASHINO_CLIENT_URL: "http://test-capashino"
+        SENTRY_DSN: "http://test-public-key@test-sentry/1"
 
     services:
       postgres:
@@ -98,10 +98,10 @@ jobs:
           POSTGRES_PASSWORD: password
 
         ports:
-          - '5432:5432'
+          - "5432:5432"
 
         options: >-
-          --health-cmd 'pg_isready -U postgres -d student_daryaneden-events-aggregator-postgres-test'
+          --health-cmd "pg_isready -U postgres -d student_daryaneden-events-aggregator-postgres-test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
@@ -113,7 +113,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "3.13"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v6
@@ -138,10 +138,10 @@ jobs:
     needs: lint
 
     env:
-        EVENT_PROVIDER_URL: 'http://test-provider'
-        EVENT_PROVIDER_API_KEY: 'test-api-key'
-        CAPASHINO_CLIENT_URL: 'http://test-capashino'
-        SENTRY_DSN: 'http://test-public-key@test-sentry/1'
+        EVENT_PROVIDER_URL: "http://test-provider"
+        EVENT_PROVIDER_API_KEY: "test-api-key"
+        CAPASHINO_CLIENT_URL: "http://test-capashino"
+        SENTRY_DSN: "http://test-public-key@test-sentry/1"
 
     steps:
       - name: Checkout code
@@ -150,7 +150,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "3.13"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v6
@@ -201,7 +201,7 @@ jobs:
       - name: Set lowercase repository name
         id: repo
         run: |
-          echo 'repo=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')' >> '$GITHUB_OUTPUT'
+          echo "repo=$(echo "${{ github.repository }}" | tr "[:upper:]" "[:lower:]")" >> "$GITHUB_OUTPUT"
 
       - name: Build and push
         uses: docker/build-push-action@v7
@@ -225,15 +225,15 @@ jobs:
     steps:
       - name: Send deploy request
         run: |
-          HTTP_CODE=$(curl -s -o response.txt -w '%{http_code}' -X POST \
-            -H 'Content-Type: application/json' \
-            -H 'X-API-Key: ${{ secrets.LMS_API_KEY }}' \
-            -d '{'image':'ghcr.io/${{ needs.build.outputs.repo }}:${{ github.sha }}','repository':'${{ github.repository }}'}' \
+          HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ${{ secrets.LMS_API_KEY }}" \
+            -d "{"image":"ghcr.io/${{ needs.build.outputs.repo }}:${{ github.sha }}","repository":"${{ github.repository }}"}" \
             https://lms.python-labs.ru/api/deploy-requests)
 
-          if [ '$HTTP_CODE' != '200' ]; then
-            echo 'Deployment failed with status code $HTTP_CODE'
-            echo 'Response body:'
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Deployment failed with status code $HTTP_CODE"
+            echo "Response body:"
             cat response.txt
             exit 1
           fi
