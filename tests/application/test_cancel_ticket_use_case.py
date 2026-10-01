@@ -12,15 +12,15 @@ async def test_cancel_ticket_cancels_ticket(provider,
                                             uow_factory,
                                             unit_of_work):
     
-    ticket_id = UUID("1fed0122-b675-42e2-8ae7-49bfb53e8d7f")
-    event_id = UUID("550e8400-e29b-41d4-a716-446655440000")
+    ticket_id = UUID('1fed0122-b675-42e2-8ae7-49bfb53e8d7f')
+    event_id = UUID('550e8400-e29b-41d4-a716-446655440000')
 
     ticket = Ticket(id=ticket_id,
                     event_id=event_id,
-                    first_name="John",
-                    last_name="Doe",
-                    email="john@example.com",
-                    seat="A1")
+                    first_name='John',
+                    last_name='Doe',
+                    email='john@example.com',
+                    seat='A1')
 
     unit_of_work.ticket_repository.get_by_id = AsyncMock(return_value=ticket)
 
@@ -42,7 +42,7 @@ async def test_cancel_ticket_raises_exception_when_ticket_not_found(
     uow_factory,
     unit_of_work,
 ):
-    ticket_id = UUID("1fed0122-b675-42e2-8ae7-49bfb53e8d7f")
+    ticket_id = UUID('1fed0122-b675-42e2-8ae7-49bfb53e8d7f')
 
     unit_of_work.ticket_repository.get_by_id = AsyncMock(
         return_value=None,

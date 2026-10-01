@@ -34,6 +34,6 @@ app.include_router(cancel_ticket_router)
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
-@app.get("/test-sentry")
+@app.get('/test-sentry')
 async def test_sentry():
-    raise RuntimeError("Test error from events-aggregator")
+    raise RuntimeError('Test error from events-aggregator')

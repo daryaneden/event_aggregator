@@ -10,7 +10,7 @@ from app.presentation.dependencies import (
 from app.presentation.mappers.event_response_mapper import EventResponseMapper
 from app.presentation.schemas.get_events_request import GetEventsRequest
 
-router = APIRouter(prefix="/api/events", tags=["get_events"])
+router = APIRouter(prefix='/api/events', tags=['get_events'])
 
 @router.get('')
 async def get_events(use_case: Annotated[GetEventsUseCase, Depends(get_get_events_use_case)],

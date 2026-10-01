@@ -9,7 +9,7 @@ from app.application.use_cases.create_ticket import CreateTicketUseCase
 from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
 from app.application.use_cases.get_event import GetEventUseCase
 from app.application.use_cases.get_events import GetEventsUseCase
-from app.application.use_cases.proccess_outbox_use_case import ProcessOutboxUseCase
+from app.application.use_cases.process_outbox import ProcessOutboxUseCase
 from app.application.use_cases.sync_events import SyncEventsUseCase
 from app.config.setting import Settings
 from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
@@ -137,6 +137,6 @@ def build_capashino_client_for_lifespan() -> CapashinoClient:
 
     return CapashinoClient(client)
 
-def build_proccess_outbox_use_case_for_lifespan() -> ProcessOutboxUseCase:
+def build_process_outbox_use_case_for_lifespan() -> ProcessOutboxUseCase:
     return ProcessOutboxUseCase(notification_client=build_capashino_client_for_lifespan(),
                              uow_factory=get_uow_factory())

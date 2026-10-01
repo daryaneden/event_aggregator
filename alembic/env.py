@@ -41,8 +41,8 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-print(">>> TABLES:", Base.metadata.tables.keys())
-print(">>> DB URL:", Settings().db_url)
+print('>>> TABLES:', Base.metadata.tables.keys())
+print('>>> DB URL:', Settings().db_url)
 
 target_metadata = Base.metadata
 
@@ -50,7 +50,7 @@ target_metadata = Base.metadata
 def do_run_migrations(connection):
     context.configure(
         compare_type=True,
-        dialect_opts={"paramstyle": "named"},
+        dialect_opts={'paramstyle': 'named'},
         connection=connection,
         target_metadata=target_metadata,
         include_schemas=True,
@@ -63,10 +63,10 @@ def do_run_migrations(connection):
 
 
 async def run_migrations_online():
-    """Run migrations in 'online' mode.
+    '''Run migrations in 'online' mode.
     In this scenario we need to create an Engine
     and associate a connection with the context.
-    """
+    '''
     connectable = create_async_engine(Settings().db_url, future=True)
 
     async with connectable.connect() as connection:

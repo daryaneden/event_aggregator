@@ -17,17 +17,17 @@ async def test_save_and_get_by_id(
 
     event = Event(
         id=event_id,
-        name="Concert",
+        name='Concert',
         place=Place(
             id=place_id,
-            name="Arena",
-            city="Helsinki",
-            address="Main street 1",
-            seats_pattern="pattern",
+            name='Arena',
+            city='Helsinki',
+            address='Main street 1',
+            seats_pattern='pattern',
         ),
         event_time=datetime(2026, 9, 10, 18, 0, tzinfo=UTC),
         registration_deadline=datetime(2026, 8, 30, 18, 0, tzinfo=UTC),
-        status="active",
+        status='active',
         number_of_visitors=100,
         changed_at=datetime(2026, 8, 20, 10, 0),
         created_at=datetime(2026, 8, 1, 10, 0),
@@ -41,9 +41,9 @@ async def test_save_and_get_by_id(
 
     assert result is not None
     assert result.id == event_id
-    assert result.name == "Concert"
+    assert result.name == 'Concert'
     assert result.place.id == place_id
-    assert result.place.city == "Helsinki"
+    assert result.place.city == 'Helsinki'
 
 
 @pytest.mark.asyncio
@@ -62,17 +62,17 @@ async def test_get_events_returns_filtered_and_paginated_events(
 ):
     event_1 = Event(
         id=uuid4(),
-        name="Concert",
+        name='Concert',
         place=Place(
             id=uuid4(),
-            name="Arena",
-            city="Helsinki",
-            address="Main street 1",
-            seats_pattern="pattern",
+            name='Arena',
+            city='Helsinki',
+            address='Main street 1',
+            seats_pattern='pattern',
         ),
         event_time=datetime(2026, 9, 1, 18, 0, tzinfo=UTC),
         registration_deadline=datetime(2026, 8, 30, 18, 0, tzinfo=UTC),
-        status="active",
+        status='active',
         number_of_visitors=100,
         changed_at=datetime(2026, 8, 20, 10, 0, tzinfo=UTC),
         created_at=datetime(2026, 8, 1, 10, 0, tzinfo=UTC),
@@ -81,17 +81,17 @@ async def test_get_events_returns_filtered_and_paginated_events(
 
     event_2 = Event(
         id=uuid4(),
-        name="Conference",
+        name='Conference',
         place=Place(
             id=uuid4(),
-            name="Hall",
-            city="Helsinki",
-            address="Second street 2",
-            seats_pattern="pattern",
+            name='Hall',
+            city='Helsinki',
+            address='Second street 2',
+            seats_pattern='pattern',
         ),
         event_time=datetime(2026, 9, 10, 18, 0, tzinfo=UTC),
         registration_deadline=datetime(2026, 9, 8, 18, 0, tzinfo=UTC),
-        status="active",
+        status='active',
         number_of_visitors=50,
         changed_at=datetime(2026, 8, 21, 10, 0, tzinfo=UTC),
         created_at=datetime(2026, 8, 2, 10, 0, tzinfo=UTC),
@@ -100,17 +100,17 @@ async def test_get_events_returns_filtered_and_paginated_events(
 
     event_3 = Event(
         id=uuid4(),
-        name="Old Event",
+        name='Old Event',
         place=Place(
             id=uuid4(),
-            name="Old Hall",
-            city="Helsinki",
-            address="Old street 3",
-            seats_pattern="pattern",
+            name='Old Hall',
+            city='Helsinki',
+            address='Old street 3',
+            seats_pattern='pattern',
         ),
         event_time=datetime(2026, 8, 1, 18, 0, tzinfo=UTC),
         registration_deadline=datetime(2026, 7, 30, 18, 0, tzinfo=UTC),
-        status="finished",
+        status='finished',
         number_of_visitors=30,
         changed_at=datetime(2026, 8, 1, 10, 0, tzinfo=UTC),
         created_at=datetime(2026, 7, 1, 10, 0, tzinfo=UTC),
@@ -131,5 +131,5 @@ async def test_get_events_returns_filtered_and_paginated_events(
 
     assert total == 2
     assert len(events) == 1
-    assert events[0].name == "Conference"
+    assert events[0].name == 'Conference'
     assert events[0].event_time == datetime(2026, 9, 10, 18, 0, tzinfo=UTC)

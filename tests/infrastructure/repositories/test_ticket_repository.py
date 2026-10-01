@@ -15,21 +15,21 @@ async def test_get_ticket_by_idempotency_key(
 
     ticket = Ticket(
         id=uuid4(),
-        event_id=UUID(provider_event["id"]),
-        first_name="John",
-        last_name="Doe",
-        email="john@example.com",
-        seat="A1",
+        event_id=UUID(provider_event['id']),
+        first_name='John',
+        last_name='Doe',
+        email='john@example.com',
+        seat='A1',
     )
 
     await ticket_repository.save(
         ticket,
-        idempotency_key="test-key",
+        idempotency_key='test-key',
     )
     await test_session.commit()
 
     result = await ticket_repository.get_by_idempotency_key(
-        "test-key",
+        'test-key',
     )
 
     assert result is not None

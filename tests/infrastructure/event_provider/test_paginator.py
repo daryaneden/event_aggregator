@@ -18,14 +18,14 @@ def create_event(name: str) -> Event:
         name=name,
         place=Place(
             id=uuid4(),
-            name="Arena",
-            city="Helsinki",
-            address="Main street 1",
-            seats_pattern="pattern"
+            name='Arena',
+            city='Helsinki',
+            address='Main street 1',
+            seats_pattern='pattern'
         ),
         event_time=datetime(2026, 9, 1, 18, 0),
         registration_deadline=datetime(2026, 8, 30, 18, 0),
-        status="active",
+        status='active',
         number_of_visitors=100,
         changed_at=datetime(2026, 8, 20, 10, 0),
         created_at=datetime(2026, 8, 1, 10, 0),
@@ -34,8 +34,8 @@ def create_event(name: str) -> Event:
 
 @pytest.mark.asyncio
 async def test_paginator_returns_events_from_one_page():
-    event_1 = create_event("Concert")
-    event_2 = create_event("Theatre")
+    event_1 = create_event('Concert')
+    event_2 = create_event('Theatre')
 
     page = EventsPage(
         events=[event_1, event_2],
@@ -69,13 +69,13 @@ async def test_paginator_returns_events_from_one_page():
 
 @pytest.mark.asyncio
 async def test_paginator_iterates_over_multiple_pages():
-    event_1 = create_event("Concert")
-    event_2 = create_event("Theatre")
-    event_3 = create_event("Exhibition")
+    event_1 = create_event('Concert')
+    event_2 = create_event('Theatre')
+    event_3 = create_event('Exhibition')
 
     first_page = EventsPage(
         events=[event_1, event_2],
-        next_url="/api/events/?cursor=abc",
+        next_url='/api/events/?cursor=abc',
     )
 
     second_page = EventsPage(
@@ -119,7 +119,7 @@ async def test_paginator_iterates_over_multiple_pages():
 
     provider.get_events_page.assert_any_await(
         changed_at=changed_at,
-        url="/api/events/?cursor=abc",
+        url='/api/events/?cursor=abc',
     )
 
 

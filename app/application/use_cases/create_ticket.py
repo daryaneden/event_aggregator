@@ -18,16 +18,10 @@ class CreateTicketUseCase:
 
     async def execute(self, data: RegisterTicketDTO) -> UUID:
 
-        print("IDEMPOTENCY KEY:", data.idempotency_key)
-
         async with self.uow_factory() as uow:
 
             if data.idempotency_key:
-                existing_ticket = (
-                    await uow.ticket_repository.get_by_idempotency_key(
-                        data.idempotency_key,
-                    )
-                )
+                existing_ticket = (await uow.ticket_repository.get_by_idempotency_key(data.idempotency_key))
 
                 if existing_ticket:
                     if not self._is_same_request(data, existing_ticket):
@@ -37,30 +31,22 @@ class CreateTicketUseCase:
 
             ticket_id = await self.provider.register_ticket(data)
 
-            ticket = Ticket(
-                id=ticket_id,
+            ticket = Ticket(id=ticket_id,
                 event_id=data.event_id,
                 first_name=data.first_name,
                 last_name=data.last_name,
                 email=data.email,
-                seat=data.seat,
-            )
+                seat=data.seat)
 
-            await uow.ticket_repository.save(
-                ticket,
-                idempotency_key=data.idempotency_key,
-            )
+            await uow.ticket_repository.save(ticket, idempotency_key=data.idempotency_key)
 
-            await uow.outbox_repository.save(
-                OutboxMessageDto(
-                    event_type="ticket_registered",
-                    payload={
-                        "ticket_id": str(ticket_id),
-                        "event_id": str(data.event_id),
-                        "first_name": data.first_name,
-                        "last_name": data.last_name,
-                        "email": data.email,
-                        "seat": data.seat}))
+            await uow.outbox_repository.save(OutboxMessageDto(event_type='ticket_registered',
+                                                              payload={'ticket_id': str(ticket_id),
+                                                                       'event_id': str(data.event_id),
+                                                                       'first_name': data.first_name,
+                                                                       'last_name': data.last_name,
+                                                                       'email': data.email,
+                                                                       'seat': data.seat}))
 
             return ticket_id
 

@@ -27,7 +27,7 @@ def http_client():
 
 @pytest.fixture
 def base_url():
-    return "https://example.com"
+    return 'https://example.com'
 
 
 @pytest.fixture
@@ -38,36 +38,33 @@ def http_response():
 
 @pytest.fixture
 def events_provider(http_client, base_url):
-    return EventsProviderClient(
-        client=http_client,
-        base_url=base_url,
-    )
+    return EventsProviderClient(client=http_client, base_url=base_url)
 
 
 @pytest.fixture
 def provider_event():
     return {
-        "id": "550e8400-e29b-41d4-a716-446655440000",
-        "name": "Concert",
-        "place": {
-            "id": "650e8400-e29b-41d4-a716-446655440000",
-            "name": "Arena",
-            "city": "Helsinki",
-            "address": "Main street 1",
-            "seats_pattern": "pattern",
-            "changed_at": "2026-08-20T10:00:00",
-            "created_at": "2026-08-01T10:00:00",
+        'id': '550e8400-e29b-41d4-a716-446655440000',
+        'name': 'Concert',
+        'place': {
+            'id': '650e8400-e29b-41d4-a716-446655440000',
+            'name': 'Arena',
+            'city': 'Helsinki',
+            'address': 'Main street 1',
+            'seats_pattern': 'pattern',
+            'changed_at': '2026-08-20T10:00:00',
+            'created_at': '2026-08-01T10:00:00',
         },
-        "event_time": "2026-09-01T18:00:00",
-        "registration_deadline": "2026-08-30T18:00:00",
-        "status": "active",
-        "number_of_visitors": 100,
-        "changed_at": "2026-08-20T10:00:00",
-        "created_at": "2026-08-01T10:00:00",
-        "status_changed_at": "2026-08-20T10:00:00",
+        'event_time': '2026-09-01T18:00:00',
+        'registration_deadline': '2026-08-30T18:00:00',
+        'status': 'active',
+        'number_of_visitors': 100,
+        'changed_at': '2026-08-20T10:00:00',
+        'created_at': '2026-08-01T10:00:00',
+        'status_changed_at': '2026-08-20T10:00:00',
     }
 
-@pytest_asyncio.fixture(scope="function")
+@pytest_asyncio.fixture(scope='function')
 async def test_engine():
     engine = create_async_engine(
         url='postgresql+asyncpg://postgres:password@localhost:5432/student_daryaneden-events-aggregator-postgres-test',
@@ -121,38 +118,24 @@ def uow(test_session):
 async def create_event(test_session):
 
     async def _create_event(provider_event):
-        place_data = provider_event["place"]
+        place_data = provider_event['place']
 
-        place = PlaceModel(
-            id=UUID(place_data["id"]),
-            name=place_data["name"],
-            city=place_data["city"],
-            address=place_data["address"],
-            seats_pattern=place_data["seats_pattern"],
-        )
+        place = PlaceModel(id=UUID(place_data['id']),
+                           name=place_data['name'],
+                           city=place_data['city'],
+                           address=place_data['address'],
+                           seats_pattern=place_data['seats_pattern'])
 
-        event = EventModel(
-            id=UUID(provider_event["id"]),
-            name=provider_event["name"],
+        event = EventModel(id=UUID(provider_event['id']),
+            name=provider_event['name'],
             place_id=place.id,
-            event_time=datetime.fromisoformat(
-                provider_event["event_time"],
-            ),
-            registration_deadline=datetime.fromisoformat(
-                provider_event["registration_deadline"],
-            ),
-            status=provider_event["status"],
-            number_of_visitors=provider_event["number_of_visitors"],
-            changed_at=datetime.fromisoformat(
-                provider_event["changed_at"],
-            ),
-            created_at=datetime.fromisoformat(
-                provider_event["created_at"],
-            ),
-            status_changed_at=datetime.fromisoformat(
-                provider_event["status_changed_at"],
-            ),
-        )
+            event_time=datetime.fromisoformat(provider_event['event_time']),
+            registration_deadline=datetime.fromisoformat(provider_event['registration_deadline']),
+            status=provider_event['status'],
+            number_of_visitors=provider_event['number_of_visitors'],
+            changed_at=datetime.fromisoformat(provider_event['changed_at']),
+            created_at=datetime.fromisoformat(provider_event['created_at']),
+            status_changed_at=datetime.fromisoformat(provider_event['status_changed_at']))
 
         test_session.add(place)
         test_session.add(event)
