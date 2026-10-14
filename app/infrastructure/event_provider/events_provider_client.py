@@ -1,6 +1,7 @@
 from datetime import datetime
 from urllib.parse import urljoin
 from uuid import UUID
+import time
 
 import httpx
 
@@ -18,6 +19,10 @@ from app.infrastructure.event_provider.dtos.provider_register_ticket import (
 )
 from app.infrastructure.event_provider.dtos.provider_seats import ProviderSeatsDTO
 
+from app.infrastructure.metrics import (
+    events_provider_requests_total,
+    events_provider_request_duration_seconds,
+)
 
 class EventsProviderClient(EventsProvider):
 
@@ -32,7 +37,9 @@ class EventsProviderClient(EventsProvider):
             url = urljoin(str(self.client.base_url),
         f'/api/events/?changed_at={changed_at.strftime('%Y-%m-%d')}')
 
-        response = await self.client.get(url)
+        response = await self._request(method="GET",
+                                       url=url,
+                                       endpoint="/events")
         response.raise_for_status()
 
         dto = ProviderEventsPageDTO.model_validate(response.json())
@@ -66,7 +73,9 @@ class EventsProviderClient(EventsProvider):
     async def get_available_seats(self, event_id: UUID) -> list[str] | None:
         url = f'/api/events/{event_id}/seats/'
 
-        response = await self.client.get(url)
+        response = await self._request(method="GET",
+                                       url=url,
+                                       endpoint="/seats")
 
         if response.status_code == 404:
             return None
@@ -79,12 +88,13 @@ class EventsProviderClient(EventsProvider):
 
     async def register_ticket(self, data: RegisterTicketDTO) -> UUID:
 
-        response = await self.client.post(f'/api/events/{data.event_id}/register/',
-                                          json=ProviderRegisterTicketDTO(first_name=data.first_name,
-                                                                        last_name=data.last_name,
-                                                                        seat=data.seat,
-                                                                        email=data.email).model_dump())
-
+        response = await self._request(method="POST",
+                                       url=f"/api/events/{data.event_id}/register/",
+                                       endpoint="/registration",
+                                       json=ProviderRegisterTicketDTO(first_name=data.first_name,
+                                                                      last_name=data.last_name,
+                                                                      seat=data.seat,
+                                                                      email=data.email).model_dump())
         response.raise_for_status()
 
         response_data = response.json()
@@ -93,12 +103,33 @@ class EventsProviderClient(EventsProvider):
 
     async def cancel_ticket(self, event_id: UUID, ticket_id: UUID) -> bool:
 
-        response = await self.client.request(method='DELETE',
-                                             url=f'/api/events/{event_id}/unregister/',
-                                             json={'ticket_id': str(ticket_id)})
+        response = await self._request(method="DELETE",
+                                       url=f"/api/events/{event_id}/unregister/",
+                                       endpoint="/registration",
+                                       json={"ticket_id": str(ticket_id)})
 
         response.raise_for_status()
 
         return True
+
+    async def _request(self, method: str, url: str, endpoint: str, **kwargs) -> httpx.Response:
+        start_time = time.monotonic()
+        status = 'error'
+
+        try:
+            response = await self.client.request(method=method,
+                                                 url=url,
+                                                 **kwargs)
+
+            status = str(response.status_code)
+            return response
+
+        finally:
+            duration = time.monotonic() - start_time
+
+            events_provider_requests_total.labels(endpoint=endpoint,
+                                                  status=status).inc()
+
+            events_provider_request_duration_seconds.labels(endpoint=endpoint).observe(duration)
 
     

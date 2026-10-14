@@ -22,38 +22,40 @@ async def test_get_events_page_returns_events_page(
         'next': None,
     }
 
-    http_client.get.return_value = http_response
+    http_client.request.return_value = http_response
 
     result = await events_provider.get_events_page(
-    changed_at=datetime(2000, 1, 1))
+        changed_at=datetime(2000, 1, 1),
+    )
 
     assert len(result.events) == 1
     assert result.events[0].id == UUID(provider_event['id'])
     assert result.events[0].name == provider_event['name']
     assert result.next_url is None
 
-    http_client.get.assert_awaited_once_with(
-        '/api/events/?changed_at=2000-01-01'
+    http_client.request.assert_awaited_once_with(
+        method='GET',
+        url='/api/events/?changed_at=2000-01-01',
     )
 
     http_response.raise_for_status.assert_called_once()
 
+
 @pytest.mark.asyncio
 async def test_get_events_page_uses_provided_url():
     response = Mock()
-
     response.json.return_value = {
         'results': [],
         'next': None,
     }
 
     client = Mock()
-    client.get = AsyncMock(return_value=response)
+    client.request = AsyncMock(return_value=response)
 
     provider = EventsProviderClient(
-    client=client,
-    base_url='https://example.com',
-)
+        client=client,
+        base_url='https://example.com',
+    )
 
     changed_at = datetime(2026, 8, 20)
     url = '/api/events/?cursor=abc'
@@ -63,7 +65,11 @@ async def test_get_events_page_uses_provided_url():
         url=url,
     )
 
-    client.get.assert_awaited_once_with(url)
+    client.request.assert_awaited_once_with(
+        method='GET',
+        url=url,
+    )
+
 
 @pytest.mark.asyncio
 async def test_get_events_page_raises_http_error():
@@ -83,12 +89,12 @@ async def test_get_events_page_raises_http_error():
     response.raise_for_status.side_effect = http_error
 
     client = Mock()
-    client.get = AsyncMock(return_value=response)
+    client.request = AsyncMock(return_value=response)
 
     provider = EventsProviderClient(
-    client=client,
-    base_url='https://example.com',
-)
+        client=client,
+        base_url='https://example.com',
+    )
 
     with pytest.raises(httpx.HTTPStatusError):
         await provider.get_events_page(

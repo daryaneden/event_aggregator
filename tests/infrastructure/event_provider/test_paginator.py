@@ -1,4 +1,3 @@
-import inspect
 from datetime import datetime
 from unittest.mock import AsyncMock, Mock
 from uuid import uuid4
@@ -10,7 +9,6 @@ from app.domain.entities.event import Event
 from app.domain.entities.place import Place
 from app.infrastructure.event_provider.events_paginator import EventsPaginator
 
-print(inspect.signature(Event))
 
 def create_event(name: str) -> Event:
     return Event(
@@ -21,7 +19,7 @@ def create_event(name: str) -> Event:
             name='Arena',
             city='Helsinki',
             address='Main street 1',
-            seats_pattern='pattern'
+            seats_pattern='pattern',
         ),
         event_time=datetime(2026, 9, 1, 18, 0),
         registration_deadline=datetime(2026, 8, 30, 18, 0),
@@ -30,7 +28,8 @@ def create_event(name: str) -> Event:
         changed_at=datetime(2026, 8, 20, 10, 0),
         created_at=datetime(2026, 8, 1, 10, 0),
         status_changed_at=datetime(2026, 8, 20, 10, 0),
-        )
+    )
+
 
 @pytest.mark.asyncio
 async def test_paginator_returns_events_from_one_page():
@@ -43,9 +42,7 @@ async def test_paginator_returns_events_from_one_page():
     )
 
     provider = Mock()
-    provider.get_events_page = AsyncMock(
-        return_value=page,
-    )
+    provider.get_events_page = AsyncMock(return_value=page)
 
     changed_at = datetime(2026, 8, 20)
 
@@ -54,10 +51,7 @@ async def test_paginator_returns_events_from_one_page():
         changed_at=changed_at,
     )
 
-    events = [
-        event
-        async for event in paginator
-    ]
+    events = [event async for event in paginator]
 
     assert events == [event_1, event_2]
 
@@ -84,12 +78,8 @@ async def test_paginator_iterates_over_multiple_pages():
     )
 
     provider = Mock()
-
     provider.get_events_page = AsyncMock(
-        side_effect=[
-            first_page,
-            second_page,
-        ],
+        side_effect=[first_page, second_page],
     )
 
     changed_at = datetime(2026, 8, 20)
@@ -99,17 +89,9 @@ async def test_paginator_iterates_over_multiple_pages():
         changed_at=changed_at,
     )
 
-    events = [
-        event
-        async for event in paginator
-    ]
+    events = [event async for event in paginator]
 
-    assert events == [
-        event_1,
-        event_2,
-        event_3,
-    ]
-
+    assert events == [event_1, event_2, event_3]
     assert provider.get_events_page.await_count == 2
 
     provider.get_events_page.assert_any_await(
@@ -131,10 +113,7 @@ async def test_paginator_returns_empty_result_for_empty_page():
     )
 
     provider = Mock()
-
-    provider.get_events_page = AsyncMock(
-        return_value=page,
-    )
+    provider.get_events_page = AsyncMock(return_value=page)
 
     changed_at = datetime(2026, 8, 20)
 
@@ -143,10 +122,7 @@ async def test_paginator_returns_empty_result_for_empty_page():
         changed_at=changed_at,
     )
 
-    events = [
-        event
-        async for event in paginator
-    ]
+    events = [event async for event in paginator]
 
     assert events == []
 

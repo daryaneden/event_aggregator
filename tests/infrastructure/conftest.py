@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock, Mock
 from uuid import UUID
 from datetime import datetime
+from unittest.mock import MagicMock
 
 import pytest
 import pytest_asyncio
@@ -15,6 +16,8 @@ from app.infrastructure.event_provider.events_provider_client import EventsProvi
 from app.presentation.dependencies import build_uow
 from app.infrastructure.database.models.event import EventModel
 from app.infrastructure.database.models.place import PlaceModel
+import app.infrastructure.event_provider.events_provider_client as client_module
+from app.infrastructure.event_provider.events_provider_client import EventsProviderClient
 
 @pytest.fixture
 def http_client():
@@ -22,6 +25,7 @@ def http_client():
     client.get = AsyncMock()
     client.post = AsyncMock()
     client.delete = AsyncMock()
+    client.request = AsyncMock()
     return client
 
 
@@ -142,3 +146,21 @@ async def create_event(test_session):
         await test_session.commit()
 
     return _create_event
+
+@pytest.fixture
+def events_provider_metrics_test_setup(monkeypatch):
+    requests_counter = MagicMock()
+    duration_histogram = MagicMock()
+
+    monkeypatch.setattr(
+        client_module,
+        "events_provider_requests_total",
+        requests_counter,
+    )
+    monkeypatch.setattr(
+        client_module,
+        "events_provider_request_duration_seconds",
+        duration_histogram,
+    )
+
+    return requests_counter, duration_histogram

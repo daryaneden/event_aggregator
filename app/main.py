@@ -2,6 +2,8 @@ import sentry_sdk
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from sentry_sdk.integrations.fastapi import FastApiIntegration
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
+from starlette.responses import Response
 
 from app.config.setting import Settings
 from app.presentation.exception_handlers import validation_exception_handler
@@ -15,6 +17,7 @@ from app.presentation.routers.get_event import router as event_router
 from app.presentation.routers.get_events import router as events_router
 from app.presentation.routers.health_check import router as health_check_router
 from app.presentation.routers.sync import router as sync_router
+from app.presentation.middleware.metrics import metrics_middleware
 
 settings = Settings()
 
@@ -23,6 +26,8 @@ sentry_sdk.init(dsn=settings.SENTRY_DSN,
                 integrations=[FastApiIntegration()])
 
 app = FastAPI(lifespan=lifespan)
+
+app.middleware("http")(metrics_middleware)
 
 app.include_router(health_check_router)
 app.include_router(sync_router)
@@ -37,3 +42,10 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 @app.get('/test-sentry')
 async def test_sentry():
     raise RuntimeError('Test error from events-aggregator')
+
+@app.get("/metrics", include_in_schema=False)
+async def metrics():
+    return Response(
+        content=generate_latest(),
+        media_type=CONTENT_TYPE_LATEST,
+    )
