@@ -1,13 +1,14 @@
 import sentry_sdk
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-from sentry_sdk.integrations.fastapi import FastApiIntegration
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
+from sentry_sdk.integrations.fastapi import FastApiIntegration
 from starlette.responses import Response
 
 from app.config.setting import Settings
 from app.presentation.exception_handlers import validation_exception_handler
 from app.presentation.lifespan import lifespan
+from app.presentation.middleware.metrics import metrics_middleware
 from app.presentation.routers.cancel_ticket import router as cancel_ticket_router
 from app.presentation.routers.create_ticket import router as create_ticket_router
 from app.presentation.routers.get_available_seats import (
@@ -17,7 +18,6 @@ from app.presentation.routers.get_event import router as event_router
 from app.presentation.routers.get_events import router as events_router
 from app.presentation.routers.health_check import router as health_check_router
 from app.presentation.routers.sync import router as sync_router
-from app.presentation.middleware.metrics import metrics_middleware
 
 settings = Settings()
 

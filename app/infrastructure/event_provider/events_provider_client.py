@@ -1,7 +1,7 @@
+import time
 from datetime import datetime
 from urllib.parse import urljoin
 from uuid import UUID
-import time
 
 import httpx
 
@@ -18,11 +18,11 @@ from app.infrastructure.event_provider.dtos.provider_register_ticket import (
     ProviderRegisterTicketDTO,
 )
 from app.infrastructure.event_provider.dtos.provider_seats import ProviderSeatsDTO
-
 from app.infrastructure.metrics import (
-    events_provider_requests_total,
     events_provider_request_duration_seconds,
+    events_provider_requests_total,
 )
+
 
 class EventsProviderClient(EventsProvider):
 

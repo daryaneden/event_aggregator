@@ -1,6 +1,5 @@
 from prometheus_client import Counter, Gauge, Histogram
 
-
 # HTTP requests
 
 http_requests_total = Counter(
