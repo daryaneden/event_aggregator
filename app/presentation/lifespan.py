@@ -3,6 +3,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
+from app.infrastructure.cache.metrics_seats_cache import MetricsSeatsCache
 from app.infrastructure.outbox_worker import outbox_worker
 from app.infrastructure.sync_worker import sync_worker
 from app.presentation.dependencies import (
@@ -13,6 +15,9 @@ from app.presentation.dependencies import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    cache = InMemorySeatsCache()
+    app.state.seats_cache = MetricsSeatsCache(cache)
+
     sync_use_case = build_sync_events_use_case_for_lifespan()
     sync_task = asyncio.create_task(sync_worker(sync_use_case))
 

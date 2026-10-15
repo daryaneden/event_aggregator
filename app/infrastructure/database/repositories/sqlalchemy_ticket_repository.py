@@ -19,7 +19,8 @@ class SqlAlchemyTicketRepository(TicketRepository):
             last_name=ticket.last_name,
             email=ticket.email,
             seat=ticket.seat,
-            idempotency_key=idempotency_key)
+            idempotency_key=idempotency_key,
+            status=ticket.status)
 
         self.session.add(model)
 
@@ -36,7 +37,8 @@ class SqlAlchemyTicketRepository(TicketRepository):
             first_name=ticket_model.first_name,
             last_name=ticket_model.last_name,
             email=ticket_model.email,
-            seat=ticket_model.seat)
+            seat=ticket_model.seat,
+            status=ticket_model.status)
 
     async def get_by_id(self, ticket_id: UUID) -> Ticket | None:
         result = await self.session.execute(select(TicketModel).where(TicketModel.id == ticket_id))
@@ -51,4 +53,13 @@ class SqlAlchemyTicketRepository(TicketRepository):
             first_name=ticket_model.first_name,
             last_name=ticket_model.last_name,
             email=ticket_model.email,
-            seat=ticket_model.seat)
+            seat=ticket_model.seat,
+            status=ticket_model.status)
+
+    async def update_status(self, ticket_id: UUID, status: str) -> None:
+        result = await self.session.execute(select(TicketModel).where(TicketModel.id == ticket_id))
+        
+        ticket_model = result.scalar_one_or_none()
+
+        if ticket_model is not None:
+            ticket_model.status = status

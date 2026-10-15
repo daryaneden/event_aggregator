@@ -25,3 +25,6 @@ class CancelTicketUseCase:
 
             await self.provider.cancel_ticket(event_id=ticket.event_id,
                                               ticket_id=ticket_id)
+
+            await uow.ticket_repository.update_status(ticket_id=ticket_id,
+                                                      status='cancelled')

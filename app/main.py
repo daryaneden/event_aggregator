@@ -1,11 +1,20 @@
+from typing import Annotated
+
 import sentry_sdk
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.exceptions import RequestValidationError
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from starlette.responses import Response
 
+from app.application.use_cases.get_business_metrics import GetBusinessMetricsUseCase
 from app.config.setting import Settings
+from app.infrastructure.metrics import (
+    events_total,
+    tickets_cancelled_total,
+    tickets_created_total,
+)
+from app.presentation.dependencies import get_business_metrics_use_case
 from app.presentation.exception_handlers import validation_exception_handler
 from app.presentation.lifespan import lifespan
 from app.presentation.middleware.metrics import metrics_middleware
@@ -44,8 +53,12 @@ async def test_sentry():
     raise RuntimeError('Test error from events-aggregator')
 
 @app.get("/metrics", include_in_schema=False)
-async def metrics():
-    return Response(
-        content=generate_latest(),
-        media_type=CONTENT_TYPE_LATEST,
-    )
+async def metrics(use_case: Annotated[GetBusinessMetricsUseCase, Depends(get_business_metrics_use_case)]):
+    business_metrics = await use_case.execute()
+
+    tickets_created_total.set(business_metrics.tickets_count)
+    tickets_cancelled_total.set(business_metrics.cancelled_tickets_count)
+    events_total.set(business_metrics.events_count)
+    
+    return Response(content=generate_latest(),
+                    media_type=CONTENT_TYPE_LATEST)

@@ -10,3 +10,4 @@ class Ticket:
     last_name: str
     email: str
     seat: str
+    status: str = 'active'

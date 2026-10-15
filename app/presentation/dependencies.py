@@ -1,22 +1,26 @@
 from typing import Annotated
 
-from fastapi import Depends
+from fastapi import Depends, Request
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.application.interfaces.seats_cache_port import SeatsCachePort
 from app.application.use_cases.cancel_ticket import CancelTicketUseCase
 from app.application.use_cases.create_ticket import CreateTicketUseCase
 from app.application.use_cases.get_available_seats import GetAvailableSeatsUseCase
+from app.application.use_cases.get_business_metrics import GetBusinessMetricsUseCase
 from app.application.use_cases.get_event import GetEventUseCase
 from app.application.use_cases.get_events import GetEventsUseCase
 from app.application.use_cases.process_outbox import ProcessOutboxUseCase
 from app.application.use_cases.sync_events import SyncEventsUseCase
 from app.config.setting import Settings
-from app.infrastructure.cache.in_memory_seats_cache import InMemorySeatsCache
 from app.infrastructure.capashino import CapashinoClient
 from app.infrastructure.database.database import AsyncSessionFactory, get_db_session
 from app.infrastructure.database.repositories.sqlalchemy_event_repository import (
     SqlAlchemyEventRepository,
+)
+from app.infrastructure.database.repositories.sqlalchemy_metrics_repository import (
+    SqlAlchemyMetricsRepository,
 )
 from app.infrastructure.database.repositories.sqlalchemy_outbox_repository import (
     SqlAlchemyOutboxRepository,
@@ -97,10 +101,12 @@ def build_uow(session: AsyncSession) -> SqlAlchemyUnitOfWork:
                                 ticket_repository=ticket_repository,
                                 outbox_repository=outbox_repository)
 
-seats_cache = InMemorySeatsCache()
+def get_seats_cache(request: Request) -> SeatsCachePort:
+    return request.app.state.seats_cache
 
-def get_get_available_seats_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)]) -> GetAvailableSeatsUseCase:
-    return GetAvailableSeatsUseCase(provider=provider, cache=seats_cache)
+def get_get_available_seats_use_case(provider: Annotated[EventsProviderClient, Depends(get_events_provider_client)],
+                                     cache: Annotated[SeatsCachePort, Depends(get_seats_cache)]) -> GetAvailableSeatsUseCase:
+    return GetAvailableSeatsUseCase(provider=provider, cache=cache)
 
 ticket_registry = InMemoryTicketRegistry()
 
@@ -140,3 +146,9 @@ def build_capashino_client_for_lifespan() -> CapashinoClient:
 def build_process_outbox_use_case_for_lifespan() -> ProcessOutboxUseCase:
     return ProcessOutboxUseCase(notification_client=build_capashino_client_for_lifespan(),
                              uow_factory=get_uow_factory())
+
+def get_sqlalchemy_metrics_repository(session: Annotated[AsyncSession, Depends(get_db_session)]) -> SqlAlchemyMetricsRepository:
+    return SqlAlchemyMetricsRepository(session)
+
+def get_business_metrics_use_case(repository: Annotated[SqlAlchemyMetricsRepository, Depends(get_sqlalchemy_metrics_repository)]) -> GetBusinessMetricsUseCase:
+    return GetBusinessMetricsUseCase(repository=repository)
